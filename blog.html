@@ -1,0 +1,1854 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+<meta name="theme-color" content="#070b14" />
+<title>StoryHub · Advanced Blog & Tutorials</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;scroll-padding-top:110px;-webkit-text-size-adjust:100%;overflow-x:hidden;}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);
+  min-height:100vh;overflow-x:hidden;line-height:1.6;
+  -webkit-font-smoothing:antialiased;transition:background .4s,color .4s;
+  padding-top:82px;
+}
+img{max-width:100%;display:block;height:auto;}
+a{text-decoration:none;color:inherit;-webkit-tap-highlight-color:transparent;}
+button,input,textarea{font-family:inherit;outline:none;border:none;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;color:inherit;}
+ul,ol{list-style:none;}
+::selection{background:var(--brand-primary);color:#fff;}
+::-webkit-scrollbar{width:8px;height:6px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border-hi);border-radius:8px;}
+h1,h2,h3,h4,h5,h6,p{overflow-wrap:break-word;word-wrap:break-word;max-width:100%;}
+.hidden{display:none !important;}
+
+:root{
+  --brand-primary:#00d4ff;--brand-secondary:#7c3aed;--brand-accent:#f472b6;
+  --brand-warning:#fbbf24;
+  --brand-glow:rgba(0,212,255,.5);
+  --brand-grad:linear-gradient(135deg,#00d4ff,#7c3aed);
+  --brand-grad-3:linear-gradient(90deg,#00d4ff,#7c3aed,#f472b6,#00d4ff);
+  --bg:#070b14;--card:#111a2e;--card-2:#16203a;
+  --border:rgba(255,255,255,.08);--border-hi:rgba(255,255,255,.16);
+  --text:#e8eefc;--muted:#93a3bd;
+  --shadow:0 20px 50px -20px rgba(0,0,0,.75);
+  --shadow-sm:0 8px 24px -12px rgba(0,0,0,.5);
+  --radius:20px;--radius-lg:28px;
+  --t:.3s cubic-bezier(.4,0,.2,1);
+  --mono:'JetBrains Mono',monospace;
+}
+[data-theme="light"]{
+  --bg:#f5f8ff;--card:#fff;--card-2:#f1f5fb;
+  --border:rgba(10,20,50,.08);--border-hi:rgba(10,20,50,.16);
+  --text:#0d1730;--muted:#5b6b88;
+  --shadow:0 20px 45px -25px rgba(20,40,90,.3);
+  --shadow-sm:0 8px 24px -12px rgba(20,40,90,.2);
+}
+
+.bg-layer{
+  position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(0,212,255,.25), transparent 50%),
+    radial-gradient(circle at 85% 25%, rgba(124,58,237,.25), transparent 50%),
+    radial-gradient(circle at 50% 90%, rgba(244,114,182,.18), transparent 50%),
+    var(--bg);
+}
+[data-theme="light"] .bg-layer{
+  background:
+    radial-gradient(circle at 15% 10%, rgba(0,212,255,.12), transparent 50%),
+    radial-gradient(circle at 85% 25%, rgba(124,58,237,.10), transparent 50%),
+    radial-gradient(circle at 50% 90%, rgba(244,114,182,.08), transparent 50%),
+    var(--bg);
+}
+
+.read-bar{position:fixed;top:0;left:0;right:0;height:3px;z-index:9999;pointer-events:none;}
+.read-fill{height:100%;width:0%;background:var(--brand-grad-3);background-size:300% 100%;animation:gradMove 4s linear infinite;box-shadow:0 0 12px var(--brand-glow);transition:width .1s linear;}
+@keyframes gradMove{0%{background-position:0% 50%;}100%{background-position:300% 50%;}}
+
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;padding:10px 12px;
+  background:rgba(17,26,46,.9);border:1px solid var(--border);border-radius:18px;
+  box-shadow:0 20px 50px -15px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.04) inset;
+  position:fixed;top:14px;left:14px;right:14px;z-index:9999;flex-wrap:nowrap;
+  backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
+  transition:transform .4s cubic-bezier(.2,.8,.2,1),opacity .3s ease;
+}
+[data-theme="light"] .topbar{background:rgba(255,255,255,.9);box-shadow:0 20px 50px -15px rgba(20,40,90,.25),0 0 0 1px rgba(0,0,0,.03) inset;}
+.topbar.nav-hidden{transform:translateY(-140%);opacity:0;pointer-events:none;}
+@media (min-width:768px){
+  .topbar{padding:12px 20px;gap:12px;top:16px;left:50%;transform:translateX(-50%);right:auto;width:calc(100% - 40px);max-width:1040px;border-radius:20px;}
+  .topbar.nav-hidden{transform:translateX(-50%) translateY(-140%);}
+  body{padding-top:96px;}
+}
+.brand{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.brand-mark{
+  width:38px;height:38px;border-radius:11px;flex-shrink:0;
+  background:var(--brand-grad);display:grid;place-items:center;
+  font-family:'Poppins',sans-serif;font-weight:900;color:#fff;font-size:1.15rem;
+  box-shadow:0 8px 20px -8px var(--brand-glow);position:relative;overflow:hidden;
+}
+@media (min-width:768px){.brand-mark{width:42px;height:42px;font-size:1.25rem;}}
+.brand-text{font-family:'Poppins',sans-serif;font-weight:800;font-size:.95rem;letter-spacing:-.02em;white-space:nowrap;}
+.brand-text .accent{background:var(--brand-grad-3);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gradMove 5s linear infinite;}
+@media (min-width:768px){.brand-text{font-size:1.05rem;}}
+.top-nav{display:none;align-items:center;gap:4px;flex:1;justify-content:center;}
+@media (min-width:1000px){.top-nav{display:flex;}}
+.top-nav a{padding:8px 14px;border-radius:10px;font-size:.85rem;font-weight:600;color:var(--muted);transition:all .2s;}
+.top-nav a:hover,.top-nav a.active{color:var(--text);background:var(--card-2);}
+.top-actions{display:flex;align-items:center;gap:5px;flex-shrink:0;}
+.icon-btn{
+  width:38px;height:38px;border-radius:11px;flex-shrink:0;
+  background:var(--card-2);border:1px solid var(--border);
+  color:var(--text);display:grid;place-items:center;font-size:1rem;transition:all .25s;position:relative;
+}
+[data-theme="light"] .icon-btn{background:rgba(10,20,50,.05);}
+@media (min-width:768px){.icon-btn{width:42px;height:42px;font-size:1.05rem;}}
+.icon-btn:active{transform:scale(.92);}
+.icon-btn:hover{border-color:var(--brand-primary);color:var(--brand-primary);}
+.icon-btn.on{background:var(--brand-grad);color:#fff;border-color:transparent;box-shadow:0 6px 16px -6px var(--brand-glow);}
+.icon-btn .badge{position:absolute;top:4px;right:4px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#ef4444;color:#fff;font-size:.6rem;font-weight:800;display:grid;place-items:center;border:2px solid var(--card);}
+.btn-back{
+  padding:0 14px;height:38px;border-radius:11px;flex-shrink:0;
+  background:var(--brand-grad);color:#fff;font-weight:700;font-size:.78rem;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  transition:all .25s;box-shadow:0 8px 18px -8px var(--brand-glow);white-space:nowrap;
+}
+@media (min-width:768px){.btn-back{padding:0 18px;height:42px;font-size:.85rem;}}
+.btn-back:hover{transform:translateY(-2px);}
+.btn-back .lbl{display:none;}
+@media (min-width:480px){.btn-back .lbl{display:inline;}}
+
+/* ═══ CONTAINER — عرض کمتر ═══ */
+.container{max-width:1080px;margin:0 auto;padding:0 14px;}
+@media (min-width:768px){.container{padding:0 20px;}}
+
+.hero{padding:40px 20px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:24px;position:relative;overflow:hidden;text-align:center;}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--brand-grad-3);background-size:300% 100%;animation:gradMove 5s linear infinite;}
+.hero > *{position:relative;z-index:2;}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:99px;background:rgba(0,212,255,.12);border:1px solid rgba(0,212,255,.3);color:var(--brand-primary);font-size:.68rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;margin-bottom:16px;}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,6vw,2.8rem);font-weight:900;letter-spacing:-.02em;line-height:1.15;margin-bottom:14px;background:var(--brand-grad-3);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gradMove 6s linear infinite;}
+.hero-desc{color:var(--muted);font-size:.88rem;max-width:640px;margin:0 auto 20px;line-height:1.7;}
+.hero-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding-top:20px;border-top:1px solid var(--border);margin-top:20px;max-width:520px;margin-left:auto;margin-right:auto;}
+@media (min-width:600px){.hero-stats{grid-template-columns:repeat(4,1fr);}}
+.hero-stat{text-align:center;}
+.hero-stat .num{font-family:'Poppins',sans-serif;font-weight:900;font-size:1.5rem;line-height:1;margin-bottom:4px;background:var(--brand-grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-stat .lbl{font-size:.7rem;color:var(--muted);font-weight:700;letter-spacing:.08em;text-transform:uppercase;}
+
+.toolbar{display:flex;flex-direction:column;gap:12px;margin-bottom:20px;position:relative;z-index:20;}
+@media (min-width:768px){.toolbar{flex-direction:row;align-items:center;}}
+.search-box{display:flex;align-items:center;gap:10px;padding:6px 6px 6px 16px;background:var(--card);border:1px solid var(--border);border-radius:14px;transition:all .25s;flex:1;min-width:0;position:relative;z-index:21;}
+.search-box.highlight{border-color:var(--brand-primary);box-shadow:0 0 0 4px rgba(0,212,255,.2);animation:searchPulse 1s ease;}
+@keyframes searchPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.02);}}
+.search-box:focus-within{border-color:var(--brand-primary);box-shadow:0 0 0 4px rgba(0,212,255,.12);}
+.search-box .ico{font-size:1rem;color:var(--muted);flex-shrink:0;}
+.search-box input{flex:1;min-width:0;padding:9px 0;font-size:.9rem;font-weight:500;position:relative;z-index:22;}
+.search-box input::placeholder{color:var(--muted);}
+.search-box .clear{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--muted);transition:all .2s;flex-shrink:0;}
+.search-box .clear:hover{background:var(--card-2);color:var(--text);}
+.view-toggle{display:flex;gap:4px;padding:4px;background:var(--card);border:1px solid var(--border);border-radius:12px;flex-shrink:0;align-self:flex-start;}
+.view-btn{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;color:var(--muted);transition:all .2s;font-size:1rem;}
+.view-btn.active{background:var(--brand-grad);color:#fff;}
+
+.filters{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 12px;scrollbar-width:thin;margin-bottom:6px;}
+.filters::-webkit-scrollbar{height:5px;}
+.filters::-webkit-scrollbar-thumb{background:var(--border-hi);border-radius:4px;}
+.chip{flex-shrink:0;padding:8px 16px;border-radius:99px;background:var(--card);border:1px solid var(--border);font-size:.78rem;font-weight:700;color:var(--muted);transition:all .25s;white-space:nowrap;}
+.chip:hover{border-color:var(--brand-primary);color:var(--brand-primary);}
+.chip.active{background:var(--brand-grad);color:#fff;border-color:transparent;box-shadow:0 8px 18px -8px var(--brand-glow);}
+
+.stats-bar{display:flex;gap:12px;flex-wrap:wrap;padding:12px 16px;margin-bottom:20px;background:var(--card);border:1px solid var(--border);border-radius:14px;font-size:.76rem;}
+.stats-bar .stat{display:flex;align-items:center;gap:6px;color:var(--muted);font-weight:600;}
+.stats-bar .stat .num{color:var(--brand-primary);font-weight:800;}
+
+/* ═══ LAYOUT — Sidebar همیشه زیر محتوا ═══ */
+.layout{display:grid;grid-template-columns:1fr;gap:24px;min-width:0;}
+
+/* ═══ POSTS GRID ═══ */
+.posts-grid{display:grid;grid-template-columns:1fr;gap:18px;}
+@media (min-width:600px){.posts-grid{grid-template-columns:repeat(2,1fr);}}
+@media (min-width:900px){.posts-grid{grid-template-columns:repeat(3,1fr);gap:16px;}
+  .post-body{padding:14px 16px 16px;}
+  .post-title{font-size:.95rem;}
+  .post-excerpt{-webkit-line-clamp:2;}
+}
+
+.series-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:6px;background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.3);color:var(--brand-warning);font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;}
+
+.featured-post{grid-column:1/-1;border-radius:var(--radius);overflow:hidden;background:var(--card);border:1px solid var(--border);display:grid;grid-template-columns:1fr;transition:transform .3s,box-shadow .3s;cursor:pointer;}
+@media (min-width:768px){.featured-post{grid-template-columns:1.2fr 1fr;}}
+.featured-post:hover{transform:translateY(-4px);box-shadow:var(--shadow);}
+.featured-thumb{aspect-ratio:16/10;position:relative;overflow:hidden;background:var(--card-2);}
+.featured-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.2,.8,.2,1);}
+.featured-post:hover .featured-thumb img{transform:scale(1.08);}
+.featured-body{padding:22px 20px;display:flex;flex-direction:column;justify-content:center;gap:12px;}
+@media (min-width:768px){.featured-body{padding:24px;}}
+.post-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:99px;background:rgba(244,114,182,.15);border:1px solid rgba(244,114,182,.3);color:var(--brand-accent);font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;width:fit-content;}
+.post-card{border-radius:var(--radius);overflow:hidden;background:var(--card);border:1px solid var(--border);display:flex;flex-direction:column;transition:all .3s;cursor:pointer;}
+.post-card:hover{transform:translateY(-6px);border-color:var(--border-hi);box-shadow:var(--shadow);}
+.post-thumb{aspect-ratio:16/10;position:relative;overflow:hidden;background:var(--card-2);}
+.post-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.8,.2,1);}
+.post-card:hover .post-thumb img{transform:scale(1.08);}
+.post-thumb .cat-pill{position:absolute;top:10px;left:10px;padding:5px 12px;border-radius:99px;background:rgba(0,0,0,.7);backdrop-filter:blur(10px);color:#fff;font-size:.68rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;}
+.post-thumb .level-pill{position:absolute;bottom:10px;right:10px;padding:4px 10px;border-radius:99px;background:rgba(34,197,94,.9);color:#fff;font-size:.62rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;}
+.level-pill.advanced{background:rgba(239,68,68,.9);}
+.level-pill.intermediate{background:rgba(251,191,36,.95);color:#1a1a1a;}
+.post-body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1;}
+.post-meta{display:flex;align-items:center;gap:8px;font-size:.72rem;color:var(--muted);font-weight:600;flex-wrap:wrap;}
+.post-meta .author{display:flex;align-items:center;gap:6px;}
+.post-meta .avatar{width:22px;height:22px;border-radius:50%;background:var(--brand-grad);display:grid;place-items:center;color:#fff;font-size:.6rem;font-weight:900;flex-shrink:0;}
+.post-meta .dot{opacity:.5;}
+.post-title{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.05rem;line-height:1.3;letter-spacing:-.02em;color:var(--text);}
+.post-card:hover .post-title,.featured-post:hover .post-title{background:var(--brand-grad-3);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gradMove 3s linear infinite;}
+.post-excerpt{font-size:.85rem;color:var(--muted);line-height:1.6;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.post-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border);font-size:.72rem;color:var(--muted);font-weight:600;}
+.post-footer .read-time,.post-footer .views{display:flex;align-items:center;gap:4px;}
+
+/* ═══ SIDEBAR — همیشه زیر محتوا ═══ */
+.sidebar{display:flex;flex-direction:column;gap:18px;min-width:0;}
+.widget{padding:20px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);}
+.widget-title{font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:800;letter-spacing:-.01em;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.widget-title .ico{font-size:1.05rem;}
+.trending-list{display:flex;flex-direction:column;gap:12px;}
+.trending-item{display:flex;gap:12px;padding:8px;border-radius:12px;transition:background .2s;cursor:pointer;}
+.trending-item:hover{background:var(--card-2);}
+.trending-num{font-family:'Poppins',sans-serif;font-weight:900;font-size:1.5rem;line-height:1;background:var(--brand-grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;min-width:32px;text-align:center;}
+.trending-content{flex:1;min-width:0;}
+.trending-title{font-size:.82rem;font-weight:700;line-height:1.35;color:var(--text);margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.trending-meta{font-size:.68rem;color:var(--muted);font-weight:600;}
+.tag-cloud{display:flex;flex-wrap:wrap;gap:6px;}
+.tag{padding:5px 12px;border-radius:8px;background:var(--card-2);border:1px solid var(--border);font-size:.72rem;font-weight:700;color:var(--muted);transition:all .2s;cursor:pointer;}
+.tag:hover{border-color:var(--brand-primary);color:var(--brand-primary);transform:translateY(-2px);}
+.tag .count{color:var(--brand-primary);margin-left:4px;font-size:.65rem;}
+.newsletter{background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(124,58,237,.12));border-color:rgba(0,212,255,.3);text-align:center;}
+.newsletter .ico{font-size:1.8rem;margin-bottom:8px;}
+.newsletter p{font-size:.8rem;color:var(--muted);margin-bottom:12px;line-height:1.55;}
+.newsletter input{width:100%;padding:11px 14px;border-radius:10px;background:var(--card);border:1px solid var(--border);font-size:.85rem;font-weight:600;color:var(--text);margin-bottom:8px;}
+.newsletter input:focus{border-color:var(--brand-primary);}
+.newsletter button{width:100%;padding:11px 14px;border-radius:10px;background:var(--brand-grad);color:#fff;font-weight:800;font-size:.82rem;transition:all .25s;}
+.newsletter button:hover{transform:translateY(-2px);}
+.series-widget{background:linear-gradient(135deg,rgba(251,191,36,.1),rgba(239,68,68,.1));border-color:rgba(251,191,36,.3);}
+.series-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:all .2s;}
+.series-item:last-child{border-bottom:none;}
+.series-item:hover{color:var(--brand-primary);}
+.series-num{width:26px;height:26px;border-radius:8px;background:var(--brand-grad);color:#fff;display:grid;place-items:center;font-size:.75rem;font-weight:900;flex-shrink:0;}
+.series-title{font-size:.8rem;font-weight:700;line-height:1.35;}
+
+/* ═══════════════════════════════════════════
+   SIDEBAR LAYOUT — Trending & Tags هم‌ارتفاع
+   ═══════════════════════════════════════════ */
+@media (min-width: 600px){
+  .sidebar{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    align-items: stretch; /* ← هم‌ارتفاع شدن */
+  }
+  /* Reading Series — تمام عرض، سطر اول */
+  .sidebar .series-widget{
+    grid-column: 1 / -1;
+  }
+  /* Trending Now — ستون چپ، هم‌ارتفاع با Tags */
+  .sidebar .widget:nth-child(2){
+    grid-column: 1 / 2;
+    align-self: stretch;
+  }
+  /* Popular Tags — ستون راست، هم‌ارتفاع با Trending */
+  .sidebar .widget:nth-child(3){
+    grid-column: 2 / 3;
+    align-self: stretch;
+  }
+  /* Weekly Digest — تمام عرض، سطر آخر */
+  .sidebar .newsletter{
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 599px){
+  .sidebar{display: flex;flex-direction: column;}
+}
+
+.empty-state{grid-column:1/-1;padding:60px 20px;text-align:center;}
+.empty-state .ico{font-size:3rem;opacity:.4;margin-bottom:14px;}
+.empty-state h3{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.15rem;margin-bottom:6px;}
+.empty-state p{color:var(--muted);font-size:.85rem;}
+
+/* ═══ ARTICLE ═══ */
+.article-layout{display:grid;grid-template-columns:1fr;gap:32px;max-width:900px;margin:0 auto;min-width:0;}
+.article-layout > *{min-width:0;}
+.article-layout > div{overflow:hidden;min-width:0;}
+@media (min-width:1200px){.article-layout{grid-template-columns:200px 1fr;max-width:1000px;}}
+
+.toc{display:none;position:sticky;top:110px;align-self:start;max-height:calc(100vh - 140px);overflow-y:auto;padding-right:12px;}
+@media (min-width:1200px){.toc{display:block;}}
+.toc-title{font-family:'Poppins',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.toc-list{display:flex;flex-direction:column;gap:2px;}
+.toc-item{padding:7px 12px;border-radius:8px;font-size:.8rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;border-left:2px solid transparent;line-height:1.4;word-break:break-word;}
+.toc-item:hover{color:var(--text);background:var(--card-2);}
+.toc-item.active{color:var(--brand-primary);background:rgba(0,212,255,.08);border-left-color:var(--brand-primary);font-weight:700;}
+.toc-item.h3{padding-left:24px;font-size:.75rem;}
+
+.toc-mobile-btn{display:none;position:fixed;bottom:80px;right:16px;z-index:9500;width:52px;height:52px;border-radius:16px;background:var(--brand-grad);color:#fff;box-shadow:0 16px 40px -10px var(--brand-glow);align-items:center;justify-content:center;font-size:1.3rem;}
+@media (max-width:1199px){.toc-mobile-btn{display:flex;}}
+.toc-mobile-overlay{position:fixed;inset:0;z-index:9600;background:rgba(7,11,20,.75);backdrop-filter:blur(8px);display:none;align-items:flex-end;justify-content:center;}
+.toc-mobile-overlay.on{display:flex;}
+.toc-mobile-panel{width:100%;max-height:70vh;background:var(--card);border-top-left-radius:24px;border-top-right-radius:24px;border-top:1px solid var(--border);padding:20px 20px 40px;overflow-y:auto;animation:slideUp .3s cubic-bezier(.2,.8,.2,1);}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.toc-mobile-panel .tm-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;font-family:'Poppins',sans-serif;font-weight:800;font-size:1rem;}
+.toc-mobile-panel .tm-close{width:36px;height:36px;border-radius:10px;background:var(--card-2);display:grid;place-items:center;font-size:1rem;}
+
+.article-view{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:24px;max-width:100%;}
+.article-hero{aspect-ratio:16/9;position:relative;overflow:hidden;background:var(--card-2);}
+@media (min-width:768px){.article-hero{aspect-ratio:21/9;}}
+.article-hero img{width:100%;height:100%;object-fit:cover;}
+.article-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(7,11,20,.9));}
+.article-hero-content{position:absolute;bottom:20px;left:20px;right:20px;z-index:2;color:#fff;max-width:100%;}
+@media (min-width:768px){.article-hero-content{bottom:24px;left:24px;right:24px;}}
+.article-hero-content .cat{display:inline-block;padding:5px 12px;border-radius:99px;background:var(--brand-grad);font-size:.68rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;}
+.article-hero-content h1{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,5vw,2.6rem);font-weight:900;line-height:1.25;letter-spacing:-.02em;text-shadow:0 2px 12px rgba(0,0,0,.5);margin-bottom:12px;max-width:100%;word-break:break-word;overflow-wrap:break-word;}
+.article-hero-content .meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:.75rem;color:rgba(255,255,255,.85);font-weight:600;}
+.article-hero-content .meta .author{display:flex;align-items:center;gap:8px;}
+.article-hero-content .meta .avatar{width:26px;height:26px;border-radius:50%;background:var(--brand-grad);display:grid;place-items:center;font-size:.68rem;font-weight:900;}
+
+.article-content{padding:26px 20px;max-width:780px;margin:0 auto;max-width:100%;overflow:hidden;}
+@media (min-width:768px){.article-content{padding:40px;}}
+.article-content p{font-size:.98rem;line-height:1.8;color:var(--text);margin-bottom:20px;max-width:100%;word-break:break-word;overflow-wrap:break-word;}
+.article-content h2{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;letter-spacing:-.02em;line-height:1.3;margin:36px 0 16px;scroll-margin-top:110px;position:relative;padding-left:14px;word-break:break-word;overflow-wrap:break-word;}
+.article-content h2::before{content:'';position:absolute;left:0;top:8px;width:4px;height:20px;border-radius:2px;background:var(--brand-grad);}
+.article-content h3{font-family:'Poppins',sans-serif;font-size:1.08rem;font-weight:800;margin:28px 0 12px;scroll-margin-top:110px;word-break:break-word;overflow-wrap:break-word;}
+.article-content blockquote{padding:18px 20px 18px 22px;border-left:4px solid var(--brand-primary);background:var(--card-2);border-radius:0 14px 14px 0;margin:24px 0;font-family:'Playfair Display',serif;font-style:italic;font-size:1rem;line-height:1.7;color:var(--text);word-break:break-word;max-width:100%;}
+.article-content ul,.article-content ol{margin:18px 0;padding-left:22px;}
+.article-content ul li{list-style:disc;}
+.article-content ol li{list-style:decimal;}
+.article-content li{font-size:.92rem;line-height:1.75;color:var(--text);margin-bottom:10px;word-break:break-word;overflow-wrap:break-word;}
+.article-content li::marker{color:var(--brand-primary);font-weight:700;}
+.article-content strong{font-weight:800;}
+.article-content em{color:var(--brand-primary);font-style:italic;}
+.article-content code:not(pre code){padding:3px 8px;border-radius:6px;background:var(--card-2);border:1px solid var(--border);font-family:var(--mono);font-size:.85em;color:var(--brand-primary);font-weight:600;word-break:break-word;}
+
+.code-block{position:relative;margin:22px 0;border-radius:14px;overflow:hidden;background:#0a0f1e;border:1px solid var(--border);max-width:100%;}
+[data-theme="light"] .code-block{background:#1e293b;}
+.code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(255,255,255,.03);border-bottom:1px solid var(--border);}
+.code-lang{font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--brand-primary);letter-spacing:.08em;text-transform:uppercase;}
+.code-copy{padding:5px 12px;border-radius:8px;background:rgba(255,255,255,.05);color:#94a3b8;font-size:.7rem;font-weight:700;transition:all .2s;display:flex;align-items:center;gap:5px;}
+.code-copy:hover{background:rgba(255,255,255,.1);color:#fff;}
+.code-copy.copied{background:rgba(34,197,94,.2);color:#22c55e;}
+.code-block pre{padding:16px;overflow-x:auto;font-family:var(--mono);font-size:.8rem;line-height:1.65;color:#e2e8f0;-webkit-overflow-scrolling:touch;max-width:100%;white-space:pre;}
+.code-block .k{color:#c084fc;}
+.code-block .s{color:#86efac;}
+.code-block .c{color:#64748b;font-style:italic;}
+.code-block .f{color:#fbbf24;}
+.code-block .p{color:#00d4ff;}
+.code-block .n{color:#f472b6;}
+.code-block .o{color:#94a3b8;}
+
+.callout{padding:14px 16px;border-radius:12px;margin:20px 0;display:flex;gap:12px;border:1px solid;font-size:.9rem;line-height:1.7;max-width:100%;word-break:break-word;}
+.callout .co-ico{font-size:1.2rem;flex-shrink:0;}
+.callout .co-body{flex:1;min-width:0;word-break:break-word;overflow-wrap:break-word;}
+.callout strong{display:block;margin-bottom:4px;font-weight:800;}
+.callout.tip{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.28);}
+.callout.tip strong{color:#22c55e;}
+.callout.warning{background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.3);}
+.callout.warning strong{color:#fbbf24;}
+.callout.info{background:rgba(0,212,255,.08);border-color:rgba(0,212,255,.3);}
+.callout.info strong{color:var(--brand-primary);}
+
+.steps{display:flex;flex-direction:column;gap:14px;margin:22px 0;}
+.step{display:flex;gap:12px;padding:14px;border-radius:14px;background:var(--card-2);border:1px solid var(--border);min-width:0;}
+.step-num{width:32px;height:32px;border-radius:10px;background:var(--brand-grad);color:#fff;display:grid;place-items:center;font-family:'Poppins',sans-serif;font-weight:900;font-size:.85rem;flex-shrink:0;}
+.step-body{flex:1;min-width:0;}
+.step-body h4{font-family:'Poppins',sans-serif;font-weight:800;font-size:.92rem;margin-bottom:6px;word-break:break-word;}
+.step-body p{font-size:.85rem;line-height:1.65;color:var(--muted);margin-bottom:0;word-break:break-word;}
+
+.comparison-table-wrap{overflow-x:auto;margin:24px 0;border-radius:12px;border:1px solid var(--border);-webkit-overflow-scrolling:touch;max-width:100%;}
+.comparison-table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:400px;}
+.comparison-table thead{background:var(--card-2);}
+.comparison-table th{padding:11px 12px;text-align:left;font-weight:800;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap;}
+.comparison-table td{padding:11px 12px;border-bottom:1px solid var(--border);color:var(--text);}
+.comparison-table tr:last-child td{border-bottom:none;}
+.comparison-table tr:hover td{background:var(--card-2);}
+
+.article-tags{display:flex;flex-wrap:wrap;gap:8px;padding:20px 0;margin-top:20px;border-top:1px solid var(--border);}
+.article-actions{display:flex;gap:8px;padding:20px 0;border-top:1px solid var(--border);margin-top:20px;flex-wrap:wrap;}
+.action-btn{padding:10px 16px;border-radius:10px;background:var(--card-2);border:1px solid var(--border);color:var(--text);font-size:.8rem;font-weight:700;display:inline-flex;align-items:center;gap:6px;transition:all .25s;}
+.action-btn:hover{border-color:var(--brand-primary);color:var(--brand-primary);transform:translateY(-2px);}
+.action-btn.liked{background:var(--brand-grad);color:#fff;border-color:transparent;}
+
+.author-box{display:flex;gap:14px;padding:18px;background:var(--card-2);border-radius:16px;margin:20px 0;min-width:0;}
+.author-box .avatar-lg{width:52px;height:52px;border-radius:50%;background:var(--brand-grad);display:grid;place-items:center;font-family:'Poppins',sans-serif;font-weight:900;color:#fff;font-size:1.2rem;flex-shrink:0;}
+.author-box .info{flex:1;min-width:0;}
+.author-box .info h4{font-family:'Poppins',sans-serif;font-weight:800;font-size:1rem;margin-bottom:4px;word-break:break-word;}
+.author-box .info .role{font-size:.72rem;color:var(--brand-primary);font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px;}
+.author-box .info p{font-size:.82rem;color:var(--muted);line-height:1.55;margin-bottom:0;word-break:break-word;}
+
+.series-nav{margin:30px 0;padding:18px;background:linear-gradient(135deg,rgba(251,191,36,.08),rgba(239,68,68,.08));border:1px solid rgba(251,191,36,.3);border-radius:16px;min-width:0;}
+.series-nav .sn-head{font-family:'Poppins',sans-serif;font-weight:800;font-size:.88rem;margin-bottom:12px;display:flex;align-items:center;gap:8px;color:var(--brand-warning);word-break:break-word;}
+.series-nav .sn-list{display:flex;flex-direction:column;gap:8px;}
+.series-nav .sn-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(0,0,0,.15);cursor:pointer;transition:all .2s;font-size:.82rem;font-weight:600;min-width:0;}
+.series-nav .sn-item:hover{background:rgba(0,0,0,.25);}
+.series-nav .sn-item.current{background:var(--brand-grad);color:#fff;}
+.series-nav .sn-item span{word-break:break-word;overflow-wrap:break-word;}
+.series-nav .sn-num{width:22px;height:22px;border-radius:6px;background:rgba(255,255,255,.15);display:grid;place-items:center;font-size:.68rem;font-weight:900;flex-shrink:0;}
+
+.comments-section{padding:26px 20px;border-top:1px solid var(--border);max-width:780px;margin:0 auto;max-width:100%;}
+@media (min-width:768px){.comments-section{padding:40px;}}
+.comments-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.comments-head h3{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.05rem;}
+.comments-head .count{font-size:.75rem;color:var(--muted);font-weight:700;padding:4px 12px;border-radius:99px;background:var(--card-2);}
+.comment-form{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:14px;background:var(--card-2);border:1px solid var(--border);margin-bottom:22px;min-width:0;}
+.comment-form textarea{width:100%;min-height:80px;padding:11px 14px;border-radius:10px;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:.85rem;font-weight:500;resize:vertical;font-family:inherit;}
+.comment-form textarea:focus{border-color:var(--brand-primary);}
+.comment-form .row{display:flex;justify-content:flex-end;gap:8px;}
+.comment-form button{padding:9px 18px;border-radius:10px;background:var(--brand-grad);color:#fff;font-weight:800;font-size:.78rem;transition:all .25s;}
+.comment-item{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--border);min-width:0;}
+.comment-item:last-child{border-bottom:none;}
+.comment-avatar{width:38px;height:38px;border-radius:50%;background:var(--brand-grad);display:grid;place-items:center;color:#fff;font-weight:900;font-size:.85rem;flex-shrink:0;}
+.comment-body{flex:1;min-width:0;}
+.comment-body .head{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;}
+.comment-body .name{font-weight:800;font-size:.85rem;}
+.comment-body .time{font-size:.7rem;color:var(--muted);font-weight:600;}
+.comment-body .text{font-size:.85rem;line-height:1.6;color:var(--muted);word-break:break-word;overflow-wrap:break-word;}
+
+.related-section{padding:24px 20px;border-top:1px solid var(--border);max-width:1100px;margin:0 auto;min-width:0;}
+@media (min-width:768px){.related-section{padding:40px;}}
+.related-head{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.05rem;margin-bottom:20px;}
+.related-grid{display:grid;grid-template-columns:1fr;gap:16px;min-width:0;}
+@media (min-width:600px){.related-grid{grid-template-columns:repeat(2,1fr);}}
+@media (min-width:900px){.related-grid{grid-template-columns:repeat(3,1fr);}}
+
+.footer{padding:32px 20px 24px;margin-top:32px;border-top:1px solid var(--border);text-align:center;color:var(--muted);font-size:.78rem;line-height:1.6;}
+.footer a{color:var(--brand-primary);font-weight:700;}
+
+.toast-wrap{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;align-items:center;}
+.toast{padding:11px 18px;border-radius:12px;background:var(--card);color:var(--text);border:1px solid var(--border);border-left:3px solid var(--brand-primary);font-weight:700;font-size:.8rem;box-shadow:var(--shadow);animation:toastIn .35s;max-width:calc(100vw - 40px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+@keyframes toastIn{from{transform:translateY(20px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.toast.out{animation:toastOut .3s ease forwards;}
+@keyframes toastOut{to{transform:translateY(20px);opacity:0;}}
+
+.fx-fade{opacity:1;transform:none;}
+body.js-loaded .fx-fade{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.2,1);}
+body.js-loaded .fx-fade.on{opacity:1;transform:translateY(0);}
+
+.to-top{position:fixed;bottom:20px;right:20px;z-index:9400;width:44px;height:44px;border-radius:14px;background:var(--brand-grad);color:#fff;display:grid;place-items:center;font-size:1.1rem;font-weight:900;opacity:0;visibility:hidden;transform:translateY(20px);transition:all .3s;box-shadow:0 14px 30px -10px var(--brand-glow);}
+.to-top.show{opacity:1;visibility:visible;transform:translateY(0);}
+@media (max-width:1199px){.to-top{bottom:80px;}}
+
+/* BOOKMARKS */
+.bookmarks-overlay{position:fixed;inset:0;z-index:9700;background:rgba(7,11,20,.75);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:flex-start;justify-content:center;padding:100px 14px 20px;overflow-y:auto;}
+[data-theme="light"] .bookmarks-overlay{background:rgba(245,248,255,.75);}
+.bookmarks-overlay.on{display:flex;}
+.bookmarks-panel{width:100%;max-width:640px;background:var(--card);border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow);overflow:hidden;animation:bmIn .3s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;max-height:calc(100vh - 130px);}
+@keyframes bmIn{from{transform:translateY(-14px) scale(.98);opacity:0;}to{transform:translateY(0) scale(1);opacity:1;}}
+.bookmarks-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,rgba(0,212,255,.06),rgba(124,58,237,.06));flex-shrink:0;}
+.bookmarks-header h3{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.05rem;display:flex;align-items:center;gap:10px;}
+.bookmarks-header h3 .count{font-size:.7rem;padding:3px 10px;border-radius:99px;background:var(--brand-grad);color:#fff;font-weight:800;}
+.bm-close{width:38px;height:38px;border-radius:11px;background:var(--card-2);border:1px solid var(--border);display:grid;place-items:center;font-size:1rem;transition:all .2s;flex-shrink:0;}
+.bm-close:hover{border-color:var(--brand-primary);color:var(--brand-primary);transform:rotate(90deg);}
+.bookmarks-list{padding:12px;overflow-y:auto;flex:1;}
+.bm-item{display:flex;gap:14px;padding:12px;border-radius:14px;background:var(--card-2);border:1px solid var(--border);margin-bottom:10px;transition:all .25s;cursor:pointer;position:relative;min-width:0;}
+.bm-item:hover{border-color:var(--brand-primary);transform:translateX(4px);}
+.bm-thumb{width:80px;height:80px;border-radius:12px;overflow:hidden;flex-shrink:0;background:var(--card);position:relative;}
+@media (min-width:600px){.bm-thumb{width:100px;height:100px;}}
+.bm-thumb img{width:100%;height:100%;object-fit:cover;}
+.bm-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;justify-content:center;}
+.bm-cat{font-size:.62rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--brand-primary);}
+.bm-title{font-family:'Poppins',sans-serif;font-weight:700;font-size:.92rem;line-height:1.35;color:var(--text);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;}
+.bm-meta{font-size:.72rem;color:var(--muted);font-weight:600;display:flex;gap:8px;flex-wrap:wrap;}
+.bm-remove{width:32px;height:32px;border-radius:9px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#ef4444;display:grid;place-items:center;font-size:.85rem;flex-shrink:0;transition:all .2s;align-self:center;}
+.bm-remove:hover{background:#ef4444;color:#fff;border-color:transparent;}
+.bm-empty{padding:60px 24px;text-align:center;}
+.bm-empty .ico{font-size:3.5rem;opacity:.35;margin-bottom:14px;}
+.bm-empty h4{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.05rem;margin-bottom:8px;}
+.bm-empty p{color:var(--muted);font-size:.85rem;line-height:1.6;max-width:320px;margin:0 auto;}
+
+@media (max-width:768px){
+  .article-hero-content h1{font-size:1.3rem;line-height:1.25;}
+  .article-content{padding:22px 16px;}
+  .article-content p,.article-content li{font-size:.92rem;line-height:1.7;}
+  .article-content h2{font-size:1.25rem;padding-left:12px;}
+  .article-content h2::before{left:0;top:6px;height:18px;}
+  .article-content h3{font-size:1.05rem;}
+  .code-block pre{font-size:.75rem;}
+  .comments-section{padding:22px 16px;}
+  .related-section{padding:22px 16px;}
+  .bookmarks-overlay{padding:88px 10px 14px;}
+  .bookmarks-panel{border-radius:18px;}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="read-bar"><div class="read-fill" id="readFill"></div></div>
+
+<div class="topbar" id="topbar">
+  <div class="brand">
+    <div class="brand-mark">S</div>
+    <div class="brand-text">Story<span class="accent">Hub</span></div>
+  </div>
+  <nav class="top-nav">
+    <a href="#" class="active" data-cat="all">Home</a>
+    <a href="#" data-cat="tutorial">📚 Tutorials</a>
+    <a href="#" data-cat="technology">💻 Tech</a>
+    <a href="#" data-cat="design">🎨 Design</a>
+    <a href="#" data-cat="business">💼 Business</a>
+    <a href="#" data-cat="ai">🤖 AI</a>
+  </nav>
+  <div class="top-actions">
+    <button class="icon-btn" id="searchBtn" aria-label="Search">🔍</button>
+    <button class="icon-btn" id="themeBtn" aria-label="Theme">🌙</button>
+    <button class="icon-btn" id="bookmarkBtn" aria-label="Bookmarks">🔖<span class="badge" id="bmCount" style="display:none">0</span></button>
+    <a href="index.html" class="btn-back"><span>←</span><span class="lbl">Back</span></a>
+  </div>
+</div>
+
+<div class="bookmarks-overlay" id="bmOverlay">
+  <div class="bookmarks-panel" onclick="event.stopPropagation()">
+    <div class="bookmarks-header">
+      <h3>🔖 Saved Articles <span class="count" id="bmPanelCount">0</span></h3>
+      <button class="bm-close" id="bmClose" aria-label="Close">✕</button>
+    </div>
+    <div class="bookmarks-list" id="bmList"></div>
+  </div>
+</div>
+
+<div class="container">
+  <div id="homeView">
+    <section class="hero">
+      <div class="hero-tag">📖 Advanced Blog · Tutorials · CMS</div>
+      <h1 class="hero-title">Stories That Teach, Inspire & Transform</h1>
+      <p class="hero-desc">Deep-dive tutorials, technical guides, and thoughtful essays on design, technology, AI, and the future of digital creation.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="num" data-count="248">0</div><div class="lbl">Articles</div></div>
+        <div class="hero-stat"><div class="num" data-count="86">0</div><div class="lbl">Tutorials</div></div>
+        <div class="hero-stat"><div class="num" data-count="42">0</div><div class="lbl">Authors</div></div>
+        <div class="hero-stat"><div class="num" data-count="240">0</div><div class="lbl">K Readers</div></div>
+      </div>
+    </section>
+
+    <div class="toolbar">
+      <div class="search-box" id="searchBox">
+        <span class="ico">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search articles, tutorials, tags... (press /)" />
+        <button class="clear hidden" id="clearBtn" aria-label="Clear">✕</button>
+      </div>
+      <div class="view-toggle">
+        <button class="view-btn active" data-view="grid" title="Grid">▦</button>
+        <button class="view-btn" data-view="list" title="List">☰</button>
+      </div>
+    </div>
+
+    <div class="filters" id="categoryFilters"></div>
+
+    <div class="stats-bar">
+      <div class="stat"><span>📝</span> <span class="num" id="resultCount">0</span> articles</div>
+      <div class="stat"><span>🔥</span> <span class="num">5</span> trending</div>
+      <div class="stat"><span>⭐</span> <span class="num">3</span> featured</div>
+      <div class="stat"><span>📚</span> <span class="num">3</span> series</div>
+    </div>
+
+    <div class="layout">
+      <main><div class="posts-grid" id="postsGrid"></div></main>
+      <aside class="sidebar">
+        <div class="widget series-widget">
+          <div class="widget-title"><span class="ico">📚</span> Reading Series</div>
+          <div id="seriesList"></div>
+        </div>
+        <div class="widget">
+          <div class="widget-title"><span class="ico">🔥</span> Trending Now</div>
+          <div class="trending-list" id="trendingList"></div>
+        </div>
+        <div class="widget">
+          <div class="widget-title"><span class="ico">#️⃣</span> Popular Tags</div>
+          <div class="tag-cloud" id="tagCloud"></div>
+        </div>
+        <div class="widget newsletter">
+          <div class="ico">📬</div>
+          <div class="widget-title" style="justify-content:center;">Weekly Digest</div>
+          <p>Get the best tutorials and articles delivered every Friday.</p>
+          <input type="email" id="newsEmail" placeholder="your@email.com" />
+          <button id="newsBtn">Subscribe Free</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div id="articleView" class="hidden"></div>
+
+  <div class="footer">
+    <p>Built with ♥ by <a href="index.html">Ali Alizada</a> · StoryHub · 2025</p>
+  </div>
+</div>
+
+<button class="to-top" id="toTop" aria-label="Back to top">↑</button>
+<button class="toc-mobile-btn" id="tocMobileBtn" aria-label="Table of contents">📑</button>
+<div class="toc-mobile-overlay" id="tocMobileOverlay">
+  <div class="toc-mobile-panel">
+    <div class="tm-header">
+      <span>📑 On This Page</span>
+      <button class="tm-close" id="tocMobileClose" aria-label="Close">✕</button>
+    </div>
+    <div class="toc-list" id="tocMobileList"></div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+var $ = function(s){ return document.querySelector(s); };
+var $$ = function(s){ return Array.prototype.slice.call(document.querySelectorAll(s)); };
+var storage = {
+  get: function(k, fb){ try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch(e){ return fb; } },
+  set: function(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+};
+function esc(s){
+  return String(s).replace(/[&<>"']/g, function(m){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+  });
+}
+function toast(msg){
+  var wrap = $('#toastWrap');
+  var t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  wrap.appendChild(t);
+  setTimeout(function(){ t.classList.add('out'); setTimeout(function(){ t.remove(); }, 300); }, 2400);
+}
+function fallbackCopy(text, cb){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); if (cb) cb(); } catch(e){ toast('Copy failed'); }
+  document.body.removeChild(ta);
+}
+
+var AUTHORS = {
+  alex: { name: 'Alex Chen', role: 'Senior Tech Editor', avatar: 'AC', bio: 'Full-stack engineer with 12 years building web platforms at scale.' },
+  sarah: { name: 'Sarah Miles', role: 'Design Systems Lead', avatar: 'SM', bio: 'Design systems architect who has shipped systems for Fortune 500 companies.' },
+  omar: { name: 'Omar Hassan', role: 'Business Strategist', avatar: 'OH', bio: 'Writer and strategist covering SaaS, indie hacking, and entrepreneurship.' },
+  luna: { name: 'Luna Park', role: 'AI Researcher', avatar: 'LP', bio: 'Machine learning researcher focused on creative applications of AI.' },
+  max: { name: 'Max Rivera', role: 'Web3 Analyst', avatar: 'MR', bio: 'Analyst covering the intersection of crypto, infrastructure, and UX.' },
+  nina: { name: 'Nina Volt', role: 'Frontend Architect', avatar: 'NV', bio: 'Performance-obsessed frontend architect.' }
+};
+
+var SERIES = {
+  reactMastery: { title: 'React Mastery', desc: 'From fundamentals to advanced patterns', posts: [4, 5, 6] },
+  designSystems: { title: 'Design Systems Deep Dive', desc: 'Build scalable design systems', posts: [1, 7] },
+  indieSaaS: { title: 'Indie SaaS Playbook', desc: 'Build and launch profitable products solo', posts: [3, 17] }
+};
+
+var CATEGORIES = [
+  { id: 'all', label: '📚 All Posts' },
+  { id: 'tutorial', label: '🎓 Tutorials' },
+  { id: 'technology', label: '💻 Technology' },
+  { id: 'design', label: '🎨 Design' },
+  { id: 'business', label: '💼 Business' },
+  { id: 'ai', label: '🤖 AI' },
+  { id: 'web3', label: '🌐 Web3' },
+  { id: 'lifestyle', label: '✨ Lifestyle' }
+];
+
+var TAGS = [
+  { name: 'react', count: 24 }, { name: 'typescript', count: 18 },
+  { name: 'design-systems', count: 12 }, { name: 'css', count: 22 },
+  { name: 'performance', count: 15 }, { name: 'ai', count: 31 },
+  { name: 'rust', count: 8 }, { name: 'startups', count: 11 },
+  { name: 'ux', count: 19 }, { name: 'web3', count: 7 },
+  { name: 'productivity', count: 14 }, { name: 'career', count: 9 }
+];
+
+function c(arr){ return arr.join(''); }
+
+var POSTS = [
+  { id:1, featured:true, title:'Building a Design System From Scratch: Complete Guide', excerpt:'A comprehensive, step-by-step guide to creating a production-ready design system — from color tokens to component libraries, documentation, and team adoption.', category:'design', catLabel:'Design', level:'intermediate', image:'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1200&q=80', author:'sarah', date:'Mar 15, 2025', readTime:'18 min', views:'24.8k', tags:['design-systems','figma','tokens','css'], series:'designSystems', seriesPart:1,
+    content: c([
+      '<p>A design system is not a project. It\'s a product that serves products. In this comprehensive guide, we\'ll build a complete design system from the ground up — including the strategy, the technical implementation, and the organizational processes that keep it alive.</p>',
+      '<h2 id="why">Why Build a Design System?</h2>',
+      '<p>Before we dive into the how, let\'s establish the why. Design systems solve real problems that every growing product team eventually faces.</p>',
+      '<div class="callout tip"><div class="co-ico">💡</div><div class="co-body"><strong>The Business Case</strong>Companies with mature design systems ship features 40-60% faster. They reduce design debt, improve consistency, and dramatically speed up onboarding for new team members. A well-executed system pays for itself within 6-12 months.</div></div>',
+      '<p>The three pillars of a successful design system are:</p>',
+      '<ul><li><strong>Consistency</strong> — The same patterns appear everywhere, building user trust</li><li><strong>Speed</strong> — Designers and engineers ship faster with reusable components</li><li><strong>Scalability</strong> — The system grows with the product without breaking</li></ul>',
+      '<h2 id="tokens">Step 1: Foundation — Design Tokens</h2>',
+      '<p>Design tokens are the atomic units of your design system. They encode design decisions into reusable, platform-agnostic values.</p>',
+      '<h3 id="colors">Color Tokens</h3>',
+      '<p>Start with a palette that has semantic meaning. Never use raw hex codes in your components — always reference tokens. This makes theming and dark mode trivial to implement.</p>',
+      '<div class="code-block"><div class="code-header"><span class="code-lang">css</span><button class="code-copy" onclick="copyCode(this)">📋 Copy</button></div>',
+      '<pre><span class="c">/* Primitives — raw values */</span>\n',
+      '<span class="p">--color-blue-50</span>: <span class="s">#eff6ff</span>;\n',
+      '<span class="p">--color-blue-500</span>: <span class="s">#3b82f6</span>;\n\n',
+      '<span class="c">/* Semantic — meaning-based */</span>\n',
+      '<span class="p">--color-primary</span>: <span class="n">var</span>(--color-blue-500);\n',
+      '<span class="p">--color-background</span>: <span class="s">#ffffff</span>;\n',
+      '<span class="p">--color-text</span>: <span class="s">#0f172a</span>;</pre></div>',
+      '<h3 id="spacing">Spacing Tokens</h3>',
+      '<p>Use an 8-point grid. This creates visual rhythm and makes layouts feel balanced. Consistent spacing is what separates amateur from professional interfaces.</p>',
+      '<h2 id="components">Step 2: Component Library</h2>',
+      '<p>Once tokens are in place, build components that use only tokens. Never hardcode values.</p>',
+      '<div class="steps">',
+      '<div class="step"><div class="step-num">1</div><div class="step-body"><h4>Start with Primitives</h4><p>Button, Input, Checkbox, Radio — the smallest building blocks used everywhere.</p></div></div>',
+      '<div class="step"><div class="step-num">2</div><div class="step-body"><h4>Build Composites</h4><p>Card, Form, Modal, Dropdown — components built from primitives.</p></div></div>',
+      '<div class="step"><div class="step-num">3</div><div class="step-body"><h4>Add Patterns</h4><p>Search, Filter Bar, Pagination — reusable UI patterns for common flows.</p></div></div>',
+      '<div class="step"><div class="step-num">4</div><div class="step-body"><h4>Document Everything</h4><p>Every component needs examples, do\'s and don\'ts, and accessibility notes.</p></div></div>',
+      '</div>',
+      '<blockquote>Ship components when you need them for the third time. If a pattern appears three times, it\'s ready to be systematized.</blockquote>',
+      '<h2 id="docs">Step 3: Documentation That Works</h2>',
+      '<p>Documentation is not a wikipage dumped after the fact. It\'s the interface through which your team experiences the system.</p>',
+      '<div class="callout warning"><div class="co-ico">⚠️</div><div class="co-body"><strong>Common Mistake</strong>Documenting every prop and variant without showing real use cases. Instead, document the <em>decisions</em> — when to use a component, when not to, and what alternatives exist.</div></div>',
+      '<h2 id="adoption">Step 4: Driving Adoption</h2>',
+      '<p>The most beautiful design system is useless if no one uses it. Adoption is a human problem, not a technical one.</p>',
+      '<ul><li><strong>Start with champions</strong> — Find designers and engineers who feel the pain</li><li><strong>Solve real problems</strong> — Don\'t build for imaginary use cases</li><li><strong>Measure everything</strong> — Track component usage and adoption rates</li><li><strong>Run office hours</strong> — Weekly sessions where anyone can get help</li></ul>',
+      '<h2 id="conclusion">Wrapping Up</h2>',
+      '<p>Building a design system is a marathon, not a sprint. Start small, iterate based on real feedback, and treat the system as a product with its own users and roadmap.</p>',
+      '<p>The most successful design systems are not the most comprehensive — they\'re the ones that solve real problems for real teams, consistently, over time.</p>'
+    ])
+  },
+  { id:2, title:'Why Rust is Eating the JavaScript Ecosystem', excerpt:'From bundlers to runtime tools, Rust-based alternatives are reshaping how we build for the web. We explore the architectural reasons and real benchmark numbers.', category:'technology', catLabel:'Technology', level:'intermediate', image:'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80', author:'alex', date:'Mar 12, 2025', readTime:'14 min', views:'18.7k', tags:['rust','javascript','performance','tooling'],
+    content: c([
+      '<p>Five years ago, if you wanted to build a JavaScript tool, you wrote it in JavaScript. Today, the biggest players are rewriting their tools in Rust — and the results are staggering.</p>',
+      '<h2 id="shift">The Great Rewrite</h2>',
+      '<p>The signs have been everywhere. Vite\'s core is built with Go and Rust. Turbopack is Rust. Biome (the ESLint killer) is Rust. SWC is Rust. Rome is Rust. This isn\'t a fad — it\'s an architectural response to real constraints.</p>',
+      '<div class="callout info"><div class="co-ico">ℹ️</div><div class="co-body"><strong>Key Insight</strong>Modern JavaScript projects routinely have 1000+ dependencies. Traditional JavaScript tooling was never designed for this scale. Rust is.</div></div>',
+      '<h2 id="why-rust">Why Rust Wins</h2>',
+      '<p>Three architectural advantages make Rust uniquely suited for developer tooling:</p>',
+      '<h3 id="parallelism">1. True Parallelism</h3>',
+      '<p>JavaScript is single-threaded. Even with Worker threads, the model is fundamentally cooperative. Rust gives you real parallelism with zero data races guaranteed by the compiler.</p>',
+      '<h3 id="memory">2. Deterministic Memory</h3>',
+      '<p>No garbage collector means no GC pauses. For a bundler running on a 10,000-module project, this saves seconds of latency.</p>',
+      '<h3 id="binary">3. Native Binaries</h3>',
+      '<p>Rust compiles to a single native binary. No Node runtime required. This means tools can start in 5ms instead of 200ms and consume 10x less memory.</p>',
+      '<h2 id="benchmarks">Real Benchmark Numbers</h2>',
+      '<p>Let\'s look at actual numbers from real projects:</p>',
+      '<div class="comparison-table-wrap"><table class="comparison-table">',
+      '<thead><tr><th>Tool</th><th>JS Equivalent</th><th>Speedup</th><th>Memory</th></tr></thead>',
+      '<tbody><tr><td>SWC</td><td>Babel</td><td>20x</td><td>-60%</td></tr>',
+      '<tr><td>Biome</td><td>ESLint + Prettier</td><td>25x</td><td>-70%</td></tr>',
+      '<tr><td>Turbopack</td><td>Webpack</td><td>10x</td><td>-50%</td></tr>',
+      '<tr><td>esbuild</td><td>Rollup</td><td>100x</td><td>-80%</td></tr>',
+      '<tr><td>Rspack</td><td>Webpack</td><td>8x</td><td>-45%</td></tr></tbody>',
+      '</table></div>',
+      '<h2 id="tradeoffs">The Trade-offs</h2>',
+      '<p>Rust isn\'t a free lunch. The costs are real:</p>',
+      '<ul><li><strong>Steeper contributor curve</strong> — Fewer developers can meaningfully contribute to a Rust codebase</li><li><strong>Slower iteration</strong> — Compile times are longer; prototyping is less fluid</li><li><strong>Ecosystem immaturity</strong> — Some libraries are still stabilizing</li></ul>',
+      '<blockquote>The performance gains are worth it for infrastructure tools, but overkill for application code that ships once a day.</blockquote>',
+      '<h2 id="future">What This Means for Developers</h2>',
+      '<p>You don\'t need to learn Rust to benefit from it. But understanding the shift helps you make better technology choices — both for your own tools and for the projects you contribute to.</p>',
+      '<h2 id="conclusion">The Road Ahead</h2>',
+      '<p>The JavaScript ecosystem is not abandoning JavaScript. It\'s dividing into two layers: a fast, native infrastructure layer written in Rust, and a productive, high-level application layer in TypeScript.</p>'
+    ])
+  },
+  { id:3, featured:true, title:'The Complete Indie SaaS Playbook: From Idea to $10k MRR', excerpt:'A detailed guide to building profitable software as a solo founder. Includes market research frameworks, pricing strategies, launch playbooks, and real revenue case studies.', category:'business', catLabel:'Business', level:'beginner', image:'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&q=80', author:'omar', date:'Mar 10, 2025', readTime:'22 min', views:'16.2k', tags:['saas','startups','indie','business'], series:'indieSaaS', seriesPart:1,
+    content: c([
+      '<p>I\'ve watched hundreds of indie founders succeed and fail. The difference between them is rarely talent or luck — it\'s the sequence of decisions they make, informed by clear frameworks. This guide distills those frameworks.</p>',
+      '<h2 id="mindset">Part 1: The Right Mindset</h2>',
+      '<p>Before you build anything, you need to internalize one truth: <strong>you\'re starting a business, not building a product</strong>.</p>',
+      '<div class="callout warning"><div class="co-ico">⚠️</div><div class="co-body"><strong>The #1 Mistake</strong>Most technical founders build features they find interesting instead of solving problems customers will pay for. Every hour spent on the "cool" feature is an hour not spent finding out if anyone wants this.</div></div>',
+      '<p>Successful indie founders obsess over three things: <strong>who</strong> they\'re building for, <strong>what</strong> pain they\'re solving, and <strong>how much</strong> they can charge for it.</p>',
+      '<h2 id="research">Part 2: Finding the Right Problem</h2>',
+      '<p>Not every problem is worth solving. The best problems share these traits:</p>',
+      '<ul><li><strong>Painful</strong> — The problem costs people real time, money, or frustration</li><li><strong>Frequent</strong> — It\'s experienced regularly, not once a year</li><li><strong>Reachable</strong> — You can find and talk to the people experiencing it</li><li><strong>Willing to pay</strong> — People are already paying for worse solutions</li></ul>',
+      '<h3 id="sources">Where to Find Problems</h3>',
+      '<div class="steps">',
+      '<div class="step"><div class="step-num">1</div><div class="step-body"><h4>Your own work</h4><p>The best problems are the ones you\'ve already solved for yourself. You understand the pain intimately.</p></div></div>',
+      '<div class="step"><div class="step-num">2</div><div class="step-body"><h4>Online communities</h4><p>Reddit, Twitter, niche forums, Discord servers. Read what people complain about repeatedly.</p></div></div>',
+      '<div class="step"><div class="step-num">3</div><div class="step-body"><h4>Job postings</h4><p>Companies hiring for a task you could automate is a signal there\'s budget for a solution.</p></div></div>',
+      '<div class="step"><div class="step-num">4</div><div class="step-body"><h4>Existing tools complaints</h4><p>The 1-star reviews of popular tools are goldmines of unmet needs.</p></div></div>',
+      '</div>',
+      '<h2 id="validation">Part 3: Validation Before Code</h2>',
+      '<p>Never build before validating. Validation means getting evidence that:</p>',
+      '<blockquote>"People will pay money for a solution to this problem before you\'ve built it."</blockquote>',
+      '<div class="callout tip"><div class="co-ico">💡</div><div class="co-body"><strong>Truth Bomb</strong>If you can\'t get 10 people to pay you $10 before you build, you won\'t get 100 people to pay you $100 after. The market is the ultimate validator.</div></div>',
+      '<h2 id="pricing">Part 4: Pricing That Works</h2>',
+      '<p>Pricing is the single highest-leverage decision in your SaaS. Most indie founders underprice by 3-5x.</p>',
+      '<div class="comparison-table-wrap"><table class="comparison-table">',
+      '<thead><tr><th>Tier</th><th>Price</th><th>Target</th><th>Features</th></tr></thead>',
+      '<tbody><tr><td>Starter</td><td>$9/mo</td><td>Individuals</td><td>Core features, 1 user</td></tr>',
+      '<tr><td>Pro</td><td>$29/mo</td><td>Power users</td><td>+ Advanced features, 3 users</td></tr>',
+      '<tr><td>Team</td><td>$99/mo</td><td>Small teams</td><td>+ Collaboration, unlimited users</td></tr></tbody>',
+      '</table></div>',
+      '<h2 id="launch">Part 5: The Launch Playbook</h2>',
+      '<div class="steps">',
+      '<div class="step"><div class="step-num">1</div><div class="step-body"><h4>Build in public for 30 days</h4><p>Share progress on Twitter, IndieHackers, Reddit. Build an audience before launch.</p></div></div>',
+      '<div class="step"><div class="step-num">2</div><div class="step-body"><h4>Waitlist of 100+ people</h4><p>Before launch, get 100 emails from people who want early access.</p></div></div>',
+      '<div class="step"><div class="step-num">3</div><div class="step-body"><h4>Launch on Product Hunt</h4><p>Tuesday-Thursday. Have your audience ready to upvote in the first hour.</p></div></div>',
+      '<div class="step"><div class="step-num">4</div><div class="step-body"><h4>Post on Hacker News</h4><p>Technical stories do best. Be transparent about numbers.</p></div></div>',
+      '<div class="step"><div class="step-num">5</div><div class="step-body"><h4>Outreach to 100 potential customers</h4><p>Personal emails, not bulk. 5-10% will respond.</p></div></div>',
+      '</div>',
+      '<h2 id="growth">Part 6: Growing to $10k MRR</h2>',
+      '<p>Getting to $10k MRR usually takes 12-24 months. The formula is simple:</p>',
+      '<div class="callout info"><div class="co-ico">📊</div><div class="co-body"><strong>The Math</strong>$10,000 MRR = 100 customers × $100/mo, or 333 customers × $30/mo, or 1000 customers × $10/mo. Choose your fight.</div></div>',
+      '<h2 id="conclusion">The Long Game</h2>',
+      '<p>Indie SaaS is a marathon. The founders who succeed are the ones who keep shipping, keep talking to customers, and keep iterating — month after month, year after year.</p>'
+    ])
+  },
+  { id:4, title:'React Server Components: The Complete Guide', excerpt:'Deep dive into React Server Components — how they work, when to use them, and the mental model shift they require. With real code examples and common pitfalls.', category:'tutorial', catLabel:'Tutorial', level:'advanced', image:'https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&q=80', author:'alex', date:'Mar 8, 2025', readTime:'16 min', views:'14.5k', tags:['react','rsc','nextjs','performance'], series:'reactMastery', seriesPart:1,
+    content: c([
+      '<p>React Server Components (RSC) represent the biggest paradigm shift in React since hooks. But they\'re also one of the most misunderstood features in the ecosystem.</p>',
+      '<h2 id="what">What Are Server Components?</h2>',
+      '<p>A React Server Component is a component that runs <em>only on the server</em>. Its code never ships to the browser. It can access databases, filesystems, and any backend resource directly.</p>',
+      '<div class="code-block"><div class="code-header"><span class="code-lang">jsx</span><button class="code-copy" onclick="copyCode(this)">📋 Copy</button></div>',
+      '<pre><span class="c">// This is a Server Component (default)</span>\n',
+      '<span class="k">async function</span> <span class="f">UserProfile</span>({ id }) {\n',
+      '  <span class="c">// Direct database access — no API needed!</span>\n',
+      '  <span class="k">const</span> user = <span class="k">await</span> db.user.<span class="f">findUnique</span>({ where: { id } });\n\n',
+      '  <span class="k">return</span> (\n',
+      '    <span class="p">&lt;div&gt;</span>\n',
+      '      <span class="p">&lt;h1&gt;</span>{user.name}<span class="p">&lt;/h1&gt;</span>\n',
+      '      <span class="p">&lt;p&gt;</span>{user.bio}<span class="p">&lt;/p&gt;</span>\n',
+      '    <span class="p">&lt;/div&gt;</span>\n',
+      '  );\n',
+      '}</pre></div>',
+      '<h2 id="shift">The Mental Model Shift</h2>',
+      '<p>Before RSC, every component was a client component. Your app had two layers: frontend and backend. With RSC, your app has three layers:</p>',
+      '<ul><li><strong>Server Components</strong> — Fetch data, render static content, no interactivity</li><li><strong>Client Components</strong> — Handle interactivity, browser APIs, event handlers</li><li><strong>Shared Components</strong> — Used in both contexts (careful with this!)</li></ul>',
+      '<div class="callout tip"><div class="co-ico">💡</div><div class="co-body"><strong>Rule of Thumb</strong>Start every component as a Server Component. Only add <code>\'use client\'</code> when you actually need interactivity.</div></div>',
+      '<h2 id="pitfalls">Common Pitfalls</h2>',
+      '<div class="callout warning"><div class="co-ico">⚠️</div><div class="co-body"><strong>Pitfall #1: Over-clienting</strong>The most common mistake is adding <code>\'use client\'</code> too eagerly. This pushes everything to the browser and loses all RSC benefits.</div></div>',
+      '<h2 id="performance">Performance Implications</h2>',
+      '<p>RSC\'s biggest wins come from bundle size. Every Server Component removed from the browser bundle is JavaScript users don\'t have to download, parse, and execute.</p>',
+      '<blockquote>On a large app, migrating half the components to Server Components can cut the client bundle by 60-70%.</blockquote>',
+      '<h2 id="conclusion">The Verdict</h2>',
+      '<p>RSC is not a fad — it\'s a fundamental rethinking of how React apps work. It\'s likely to become the default way we build large React applications over the next few years.</p>'
+    ])
+  },
+  { id:5, title:'Advanced React Patterns: Compound Components & Beyond', excerpt:'Master advanced React patterns that separate senior engineers from juniors. Compound components, render props, hooks composition, and when each pattern makes sense.', category:'tutorial', catLabel:'Tutorial', level:'advanced', image:'https://images.unsplash.com/photo-1581276879432-15e50529f34b?w=800&q=80', author:'alex', date:'Mar 5, 2025', readTime:'15 min', views:'11.8k', tags:['react','patterns','hooks','architecture'], series:'reactMastery', seriesPart:2,
+    content: c([
+      '<p>Anyone can write a React component. But knowing when to reach for compound components, render props, or custom hooks — and understanding the trade-offs — is what separates senior engineers from the rest.</p>',
+      '<h2 id="compound">Pattern 1: Compound Components</h2>',
+      '<p>Compound components let you build a family of components that work together and share state implicitly. Think of HTML\'s <code>&lt;select&gt;</code> and <code>&lt;option&gt;</code>.</p>',
+      '<div class="code-block"><div class="code-header"><span class="code-lang">jsx</span><button class="code-copy" onclick="copyCode(this)">📋 Copy</button></div>',
+      '<pre><span class="c">// Usage — clean and expressive</span>\n',
+      '<span class="p">&lt;Tabs</span> <span class="f">defaultValue</span>=<span class="s">"profile"</span><span class="p">&gt;</span>\n',
+      '  <span class="p">&lt;Tabs.List&gt;</span>\n',
+      '    <span class="p">&lt;Tabs.Trigger</span> <span class="f">value</span>=<span class="s">"profile"</span><span class="p">&gt;</span>Profile<span class="p">&lt;/Tabs.Trigger&gt;</span>\n',
+      '    <span class="p">&lt;Tabs.Trigger</span> <span class="f">value</span>=<span class="s">"settings"</span><span class="p">&gt;</span>Settings<span class="p">&lt;/Tabs.Trigger&gt;</span>\n',
+      '  <span class="p">&lt;/Tabs.List&gt;</span>\n',
+      '  <span class="p">&lt;Tabs.Panel</span> <span class="f">value</span>=<span class="s">"profile"</span><span class="p">&gt;</span>Profile content<span class="p">&lt;/Tabs.Panel&gt;</span>\n',
+      '<span class="p">&lt;/Tabs&gt;</span></pre></div>',
+      '<div class="callout tip"><div class="co-ico">💡</div><div class="co-body"><strong>When to Use</strong>When you have a group of components that must work together and share implicit state. Tabs, Menus, Accordions, Selects.</div></div>',
+      '<h2 id="hooks">Pattern 2: Custom Hooks Composition</h2>',
+      '<p>The most important modern pattern. Custom hooks let you extract stateful logic into reusable functions.</p>',
+      '<div class="code-block"><div class="code-header"><span class="code-lang">jsx</span><button class="code-copy" onclick="copyCode(this)">📋 Copy</button></div>',
+      '<pre><span class="k">function</span> <span class="f">useLocalStorage</span>(key, initial) {\n',
+      '  <span class="k">const</span> [value, setValue] = <span class="f">useState</span>(() =&gt; {\n',
+      '    <span class="k">try</span> {\n',
+      '      <span class="k">const</span> item = localStorage.<span class="f">getItem</span>(key);\n',
+      '      <span class="k">return</span> item ? <span class="f">JSON.parse</span>(item) : initial;\n',
+      '    } <span class="k">catch</span> {\n',
+      '      <span class="k">return</span> initial;\n',
+      '    }\n',
+      '  });\n\n',
+      '  <span class="k">return</span> [value, setValue];\n',
+      '}</pre></div>',
+      '<h2 id="when">When to Use What</h2>',
+      '<div class="comparison-table-wrap"><table class="comparison-table">',
+      '<thead><tr><th>Pattern</th><th>Best For</th><th>Avoid When</th></tr></thead>',
+      '<tbody><tr><td>Compound</td><td>Related components sharing state</td><td>Simple, single-purpose components</td></tr>',
+      '<tr><td>Render Props</td><td>Reusable render logic</td><td>Simple state logic (use hooks)</td></tr>',
+      '<tr><td>Custom Hooks</td><td>Reusable stateful logic</td><td>UI components (use compound)</td></tr></tbody>',
+      '</table></div>',
+      '<h2 id="conclusion">The Senior Engineer Mindset</h2>',
+      '<p>Patterns are tools, not goals. The senior engineer doesn\'t reach for compound components because they\'re clever — they reach for them because the problem calls for it.</p>',
+      '<blockquote>The best abstraction is the one that disappears. Users of your components shouldn\'t know or care how they work internally.</blockquote>'
+    ])
+  },
+  { id:6, title:'React Performance Optimization: A Practical Deep Dive', excerpt:'Real-world techniques for making React apps fast. Memoization, virtualization, code splitting, and profiling tools — with before and after benchmarks from production.', category:'tutorial', catLabel:'Tutorial', level:'advanced', image:'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&q=80', author:'nina', date:'Mar 2, 2025', readTime:'17 min', views:'13.2k', tags:['react','performance','optimization','profiling'], series:'reactMastery', seriesPart:3,
+    content: c([
+      '<p>React is fast by default. But modern apps can still feel sluggish. This guide walks through the exact techniques I use to make React apps blazingly fast — with real numbers from production.</p>',
+      '<h2 id="measure">Rule #1: Measure Before Optimizing</h2>',
+      '<p>Never optimize based on intuition. Profile first.</p>',
+      '<div class="callout warning"><div class="co-ico">⚠️</div><div class="co-body"><strong>Anti-Pattern</strong>Wrapping everything in <code>React.memo</code> and <code>useMemo</code> without measuring. This adds complexity and can actually slow things down.</div></div>',
+      '<h2 id="re-renders">The Real Problem: Unnecessary Re-renders</h2>',
+      '<p>90% of React performance issues come from components re-rendering when they don\'t need to.</p>',
+      '<div class="code-block"><div class="code-header"><span class="code-lang">jsx</span><button class="code-copy" onclick="copyCode(this)">📋 Copy</button></div>',
+      '<pre><span class="c">// ❌ Bad: New object on every render</span>\n',
+      '<span class="k">function</span> <span class="f">Parent</span>() {\n',
+      '  <span class="k">return</span> <span class="p">&lt;Child</span> <span class="f">style</span>={{ color: <span class="s">\'red\'</span> }} <span class="p">/&gt;</span>;\n',
+      '}\n\n',
+      '<span class="c">// ✅ Good: Stable reference</span>\n',
+      '<span class="k">const</span> STYLE = { color: <span class="s">\'red\'</span> };\n\n',
+      '<span class="k">function</span> <span class="f">Parent</span>() {\n',
+      '  <span class="k">return</span> <span class="p">&lt;Child</span> <span class="f">style</span>={STYLE} <span class="p">/&gt;</span>;\n',
+      '}</pre></div>',
+      '<h2 id="virtualization">Virtualization for Long Lists</h2>',
+      '<p>Rendering 10,000 items destroys performance. Virtualize instead — only render what\'s visible.</p>',
+      '<h2 id="examples">Real Production Wins</h2>',
+      '<div class="comparison-table-wrap"><table class="comparison-table">',
+      '<thead><tr><th>Optimization</th><th>Before</th><th>After</th><th>Improvement</th></tr></thead>',
+      '<tbody><tr><td>List virtualization</td><td>8.2s</td><td>0.3s</td><td>27x faster</td></tr>',
+      '<tr><td>Code splitting</td><td>1.4MB</td><td>340KB</td><td>75% smaller</td></tr>',
+      '<tr><td>Memoization</td><td>420ms</td><td>85ms</td><td>5x faster</td></tr>',
+      '<tr><td>Debouncing search</td><td>28 req</td><td>3 req</td><td>89% fewer</td></tr></tbody>',
+      '</table></div>',
+      '<h2 id="conclusion">The Golden Rules</h2>',
+      '<ol><li><strong>Measure first</strong> — No optimization without data</li><li><strong>Fix the algorithm</strong> — Better algorithm beats better code</li><li><strong>Reduce work</strong> — Render less, compute less, ship less</li><li><strong>Test on real devices</strong> — Your MacBook Pro is not a mid-range Android</li></ol>'
+    ])
+  },
+  { id:7, title:'The Anatomy of a Great Component API', excerpt:'What separates a component that developers love from one they dread? We analyze real-world examples from Radix, Headless UI, and Chakra to find the patterns.', category:'design', catLabel:'Design', level:'intermediate', image:'https://images.unsplash.com/photo-1517292987719-0369a794ec0f?w=800&q=80', author:'sarah', date:'Feb 28, 2025', readTime:'12 min', views:'9.4k', tags:['design-systems','api','components','dx'], series:'designSystems', seriesPart:2,
+    content: c([
+      '<p>Component APIs are the user interface for developers. When they\'re good, building feels effortless. When they\'re bad, developers fight the API every step of the way.</p>',
+      '<h2 id="principles">The Five Principles</h2>',
+      '<p>After analyzing hundreds of component libraries, five principles emerge:</p>',
+      '<h3 id="principle-1">1. Composition Over Configuration</h3>',
+      '<p>Give developers primitives they can compose, not mega-components with 50 props.</p>',
+      '<h2 id="real-examples">Real-World Analysis</h2>',
+      '<h3 id="radix">Radix UI</h3>',
+      '<p><strong>Strengths:</strong> Unstyled primitives, excellent accessibility, flexible.</p>',
+      '<p><strong>Trade-offs:</strong> Minimal defaults mean more styling work.</p>',
+      '<h3 id="headless">Headless UI</h3>',
+      '<p><strong>Strengths:</strong> Tailwind-friendly, well-documented.</p>',
+      '<p><strong>Trade-offs:</strong> Tightly coupled to Tailwind ecosystem.</p>',
+      '<h3 id="chakra">Chakra UI</h3>',
+      '<p><strong>Strengths:</strong> Batteries included, great DX, consistent styling.</p>',
+      '<p><strong>Trade-offs:</strong> Opinionated — customization requires fighting.</p>',
+      '<blockquote>The best component API is one that disappears. Developers stop noticing it and just build.</blockquote>',
+      '<h2 id="conclusion">The Takeaway</h2>',
+      '<p>Great component APIs share a common trait: they make the right thing easy and the wrong thing hard. They\'re opinionated about structure but flexible about details.</p>'
+    ])
+  },
+  { id:8, title:'CSS in 2025: What Actually Matters', excerpt:'CSS has evolved dramatically. Container queries, cascade layers, :has(), subgrid, and view transitions — here is what is production-ready and what to skip.', category:'technology', catLabel:'Technology', level:'intermediate', image:'https://images.unsplash.com/photo-1507721999472-8ed4421c4af2?w=800&q=80', author:'nina', date:'Feb 25, 2025', readTime:'13 min', views:'11.5k', tags:['css','web','frontend','modern-css'],
+    content: c([
+      '<p>CSS has changed more in the last three years than in the twenty years before. Here is what is actually production-ready and what is still experimental.</p>',
+      '<h2 id="container">Container Queries — Ship It</h2>',
+      '<p>Container queries are the biggest CSS feature since media queries. They let components respond to their own container size, not the viewport.</p>',
+      '<div class="code-block"><div class="code-header"><span class="code-lang">css</span><button class="code-copy" onclick="copyCode(this)">📋 Copy</button></div>',
+      '<pre><span class="p">.card-container</span> {\n',
+      '  <span class="f">container-type</span>: inline-size;\n',
+      '}\n\n',
+      '<span class="k">@container</span> (min-width: <span class="n">400px</span>) {\n',
+      '  <span class="p">.card</span> {\n',
+      '    <span class="f">display</span>: grid;\n',
+      '    <span class="f">grid-template-columns</span>: <span class="n">200px</span> 1fr;\n',
+      '  }\n',
+      '}</pre></div>',
+      '<h2 id="has">:has() — Finally Ready</h2>',
+      '<p>The parent selector we have been waiting for. Now supported in all major browsers.</p>',
+      '<h2 id="layers">Cascade Layers — Worth Learning</h2>',
+      '<p>Layers let you control CSS specificity explicitly, ending the !important wars.</p>',
+      '<div class="callout warning"><div class="co-ico">⚠️</div><div class="co-body"><strong>Not Yet</strong>View Transitions are still Chrome-only for cross-document transitions. Use with progressive enhancement.</div></div>',
+      '<h2 id="what-to-skip">What to Skip (For Now)</h2>',
+      '<ul><li><strong>Anchor positioning</strong> — Cool but unstable APIs</li><li><strong>Scroll-driven animations</strong> — Chrome-only, no Safari support yet</li><li><strong>CSS nesting</strong> — Supported but tooling still catching up</li><li><strong>@scope</strong> — Promising but not ready for production</li></ul>',
+      '<h2 id="conclusion">The Takeaway</h2>',
+      '<p>The modern CSS toolbox is dramatically more powerful than it was three years ago. Adopt the stable features and stay informed about what is coming.</p>'
+    ])
+  },
+  { id:9, title:'The Web3 Reality Check: What Actually Works', excerpt:'Beyond the hype and the crashes, Web3 has real use cases gaining traction. We examine stablecoins, decentralized identity, and the infrastructure that survives.', category:'web3', catLabel:'Web3', level:'intermediate', image:'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=800&q=80', author:'max', date:'Feb 22, 2025', readTime:'11 min', views:'6.8k', tags:['web3','blockchain','crypto','defi'],
+    content: c([
+      '<p>The Web3 conversation has matured. The speculative frenzy has cooled, leaving behind the projects that actually solve real problems.</p>',
+      '<h2 id="stablecoins">Stablecoins: Quietly Winning</h2>',
+      '<p>While everyone argues about Bitcoin\'s price, stablecoins are becoming the backbone of global payments.</p>',
+      '<ul><li><strong>Cross-border payments</strong> — Settling in seconds for pennies, versus days and dollars</li><li><strong>Remittances</strong> — Saving 5-7% on transfers for millions of workers</li><li><strong>DeFi collateral</strong> — The foundation for a parallel financial system</li></ul>',
+      '<blockquote>The most successful Web3 application isn\'t a dapp — it\'s a dollar-pegged token that transfers value globally without banks.</blockquote>',
+      '<h2 id="infrastructure">The Infrastructure That Survives</h2>',
+      '<ul><li><strong>Layer 2 scaling</strong> — Fees dropped 100x in the last two years</li><li><strong>Account abstraction</strong> — Wallets that don\'t require seed phrases</li><li><strong>Zero-knowledge proofs</strong> — Privacy at scale, finally practical</li><li><strong>Decentralized storage</strong> — Content-addressed, tamper-proof</li></ul>',
+      '<h2 id="conclusion">The Takeaway</h2>',
+      '<p>The next wave of Web3 won\'t be defined by tokens or speculation. It will be defined by applications that are genuinely better because they\'re decentralized.</p>'
+    ])
+  },
+  { id:10, title:'Living With Intention in a Distracted World', excerpt:'Practical strategies for reclaiming attention, building deep focus, and designing a life that reflects your actual values — not the algorithms values.', category:'lifestyle', catLabel:'Lifestyle', level:'beginner', image:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&q=80', author:'luna', date:'Feb 20, 2025', readTime:'9 min', views:'7.1k', tags:['mindfulness','productivity','focus','habits'],
+    content: c([
+      '<p>We live in the most distracted era in human history. Every app, every notification, every algorithmic feed is engineered to capture and hold our attention.</p>',
+      '<h2 id="cost">The Real Cost of Distraction</h2>',
+      '<p>Research shows it takes an average of 23 minutes to regain deep focus after a distraction. In a typical day, that adds up to hours of lost productive time.</p>',
+      '<div class="callout info"><div class="co-ico">📊</div><div class="co-body"><strong>By the Numbers</strong>The average knowledge worker checks email every 6 minutes. The average phone user touches their phone over 2,600 times per day.</div></div>',
+      '<h2 id="strategies">Practical Strategies That Work</h2>',
+      '<div class="steps">',
+      '<div class="step"><div class="step-num">1</div><div class="step-body"><h4>Design your environment</h4><p>Make focus the default. Phone in another room. Notifications off.</p></div></div>',
+      '<div class="step"><div class="step-num">2</div><div class="step-body"><h4>Schedule deep work</h4><p>Two hours of uninterrupted focus daily beats eight hours of fragmented work.</p></div></div>',
+      '<div class="step"><div class="step-num">3</div><div class="step-body"><h4>Single-task ruthlessly</h4><p>Multitasking is a myth. When you work, work. When you rest, rest.</p></div></div>',
+      '<div class="step"><div class="step-num">4</div><div class="step-body"><h4>Build digital sabbaths</h4><p>One day per week with no screens. It will feel impossible at first, then essential.</p></div></div>',
+      '</div>',
+      '<blockquote>Attention is the rarest and purest form of generosity. — Simone Weil</blockquote>',
+      '<h2 id="conclusion">The Takeaway</h2>',
+      '<p>The goal isn\'t to eliminate technology. It\'s to use it intentionally — to make technology serve your values, not the other way around.</p>'
+    ])
+  },
+  { id:11, title:'The AI Creative Revolution: Tools That Actually Help', excerpt:'Practical AI tools for designers, writers, and developers that genuinely amplify creativity — not replace it. With real workflow examples.', category:'ai', catLabel:'AI', level:'beginner', image:'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80', author:'luna', date:'Feb 18, 2025', readTime:'10 min', views:'15.3k', tags:['ai','creativity','tools','workflow'],
+    content: c([
+      '<p>The AI conversation has shifted from "will it replace us?" to "how do we work with it effectively?" Here are the tools and workflows that actually help creative professionals.</p>',
+      '<h2 id="designers">For Designers</h2>',
+      '<p>AI won\'t replace you. But designers who use AI will replace those who don\'t.</p>',
+      '<ul><li><strong>Rapid exploration</strong> — Generate 50 layout variations in minutes, then refine the best</li><li><strong>Content generation</strong> — Realistic placeholder text and images, no lorem ipsum</li><li><strong>Accessibility audits</strong> — Automated checks for contrast, ARIA, keyboard nav</li><li><strong>Design token generation</strong> — Consistent color systems from a single seed</li></ul>',
+      '<h2 id="writers">For Writers</h2>',
+      '<p>AI is a drafting tool, not a writing replacement.</p>',
+      '<ul><li><strong>First drafts</strong> — Break through the blank page faster</li><li><strong>Editing passes</strong> — Catch cliches, tighten prose, adjust tone</li><li><strong>Research summaries</strong> — Digest long documents quickly</li><li><strong>Translation</strong> — Fluent output in dozens of languages</li></ul>',
+      '<div class="callout tip"><div class="co-ico">💡</div><div class="co-body"><strong>The Rule</strong>Use AI for the first 20% (starting) and the last 20% (polishing). Keep the middle 60% — the actual thinking — for yourself.</div></div>',
+      '<h2 id="developers">For Developers</h2>',
+      '<ul><li><strong>Boilerplate generation</strong> — Project scaffolding, config files, tests</li><li><strong>Refactoring</strong> — Extract functions, rename variables, restructure code</li><li><strong>Code review</strong> — Catch bugs, suggest improvements, spot patterns</li><li><strong>Documentation</strong> — Generate docs from code</li></ul>',
+      '<h2 id="conclusion">The Takeaway</h2>',
+      '<p>The winners won\'t be those who resist AI or blindly adopt it. They\'ll be those who integrate it thoughtfully into their craft.</p>'
+    ])
+  },
+  { id:12, title:'TypeScript Tips That Will Make You Better', excerpt:'Advanced TypeScript techniques that separate intermediates from experts — generics, conditional types, template literals, and type-safe patterns for real code.', category:'tutorial', catLabel:'Tutorial', level:'advanced', image:'https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=800&q=80', author:'alex', date:'Feb 15, 2025', readTime:'14 min', views:'12.3k', tags:['typescript','javascript','types','advanced'],
+    content: c([
+      '<p>TypeScript is easy to learn but hard to master. These advanced techniques will level up your type game.</p>',
+      '<h2 id="generics">Generic Constraints That Actually Help</h2>',
+      '<p>Most developers use generics like <code>&lt;T&gt;</code>. Better developers constrain them.</p>',
+      '<div class="code-block"><div class="code-header"><span class="code-lang">typescript</span><button class="code-copy" onclick="copyCode(this)">📋 Copy</button></div>',
+      '<pre><span class="c">// ❌ Too loose</span>\n',
+      '<span class="k">function</span> <span class="f">getProperty</span>&lt;T&gt;(obj: T, key: <span class="k">string</span>) {\n',
+      '  <span class="k">return</span> obj[key]; <span class="c">// Error: no index signature</span>\n',
+      '}\n\n',
+      '<span class="c">// ✅ Constrained</span>\n',
+      '<span class="k">function</span> <span class="f">getProperty</span>&lt;T, K <span class="k">extends</span> <span class="k">keyof</span> T&gt;(obj: T, key: K) {\n',
+      '  <span class="k">return</span> obj[key]; <span class="c">// Perfectly typed</span>\n',
+      '}\n\n',
+      '<span class="k">const</span> user = { name: <span class="s">\'Alex\'</span>, age: <span class="n">30</span> };\n',
+      '<span class="k">const</span> name = <span class="f">getProperty</span>(user, <span class="s">\'name\'</span>); <span class="c">// string</span></pre></div>',
+      '<h2 id="conditional">Conditional Types for Smart APIs</h2>',
+      '<p>Types that change based on input. Perfect for wrapper functions.</p>',
+      '<h2 id="discriminated">Discriminated Unions</h2>',
+      '<p>The most powerful pattern in TypeScript. Model state machines with compile-time safety.</p>',
+      '<div class="code-block"><div class="code-header"><span class="code-lang">typescript</span><button class="code-copy" onclick="copyCode(this)">📋 Copy</button></div>',
+      '<pre><span class="k">type</span> State =\n',
+      '  | { status: <span class="s">\'idle\'</span> }\n',
+      '  | { status: <span class="s">\'loading\'</span> }\n',
+      '  | { status: <span class="s">\'success\'</span>; data: User }\n',
+      '  | { status: <span class="s">\'error\'</span>; error: <span class="k">string</span> };</pre></div>',
+      '<h2 id="conclusion">The Takeaway</h2>',
+      '<p>Advanced TypeScript isn\'t about writing complex types. It\'s about making complex code simple to use.</p>'
+    ])
+  },
+  { id:13, title:'The Death of the Monolith (And Why It Is Coming Back)', excerpt:'The pendulum is swinging. After a decade of microservices worship, teams are rediscovering the monolith. Here is what is actually happening.', category:'technology', catLabel:'Technology', level:'intermediate', image:'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80', author:'alex', date:'Feb 12, 2025', readTime:'11 min', views:'8.9k', tags:['architecture','monolith','microservices','backend'],
+    content: c([
+      '<p>In 2015, microservices were the answer. In 2025, they are the question. The industry is rediscovering what we should never have forgotten.</p>',
+      '<h2 id="history">How We Got Here</h2>',
+      '<p>The microservices movement was born of real problems: Netflix-scale traffic, thousand-person engineering teams, and the chaos of coordinating deploys across dozens of engineers.</p>',
+      '<p>But those problems did not apply to 99% of companies. Most teams adopted microservices for scale they would never have — and paid the complexity tax anyway.</p>',
+      '<h2 id="cost">The Hidden Cost</h2>',
+      '<ul><li><strong>Operational overhead</strong> — Every service needs monitoring, logging, deploys</li><li><strong>Network complexity</strong> — Latency, retries, circuit breakers, service mesh</li><li><strong>Data consistency</strong> — Distributed transactions are a nightmare</li><li><strong>Developer friction</strong> — Running 15 services locally is painful</li></ul>',
+      '<div class="callout warning"><div class="co-ico">⚠️</div><div class="co-body"><strong>Reality Check</strong>Most companies do not need microservices. They need well-structured monoliths with clean module boundaries.</div></div>',
+      '<h2 id="return">The Modular Monolith Returns</h2>',
+      '<ul><li><strong>Single deploy</strong> — One binary, one deploy pipeline, one log stream</li><li><strong>Clear boundaries</strong> — Modules communicate through well-defined interfaces</li><li><strong>Easy refactoring</strong> — Extract services later if you truly need to</li><li><strong>Fast iteration</strong> — No cross-service coordination required</li></ul>',
+      '<blockquote>Start with a monolith. Split when — and only when — the pain is real.</blockquote>',
+      '<h2 id="conclusion">The Takeaway</h2>',
+      '<p>Architecture should serve the team, not the other way around. For most teams, the modular monolith is the right answer for years, maybe forever.</p>'
+    ])
+  },
+  { id:14, title:'Debugging Like a Senior Engineer', excerpt:'The mental models, tools, and techniques senior engineers use to track down bugs in minutes that would take others hours. A systematic approach.', category:'tutorial', catLabel:'Tutorial', level:'intermediate', image:'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=800&q=80', author:'alex', date:'Feb 10, 2025', readTime:'12 min', views:'10.4k', tags:['debugging','engineering','tools','career'],
+    content: c([
+      '<p>Debugging is not a talent. It is a skill — one you can learn systematically. Here is how senior engineers approach bugs.</p>',
+      '<h2 id="mental-model">The Mental Model</h2>',
+      '<p>Senior engineers debug by <em>narrowing the search space</em>, not by guessing. Every step reduces uncertainty.</p>',
+      '<div class="steps">',
+      '<div class="step"><div class="step-num">1</div><div class="step-body"><h4>Reproduce Reliably</h4><p>If you cannot reproduce it, you cannot fix it. Create a minimal test case first.</p></div></div>',
+      '<div class="step"><div class="step-num">2</div><div class="step-body"><h4>Bisect the Problem</h4><p>Disable half the code. Does the bug persist? Now you know which half it is in.</p></div></div>',
+      '<div class="step"><div class="step-num">3</div><div class="step-body"><h4>Form Hypotheses</h4><p>Do not guess randomly. Form a hypothesis, then test it.</p></div></div>',
+      '<div class="step"><div class="step-num">4</div><div class="step-body"><h4>Read the Stack Trace</h4><p>Actually read it. All of it. The answer is often right there.</p></div></div>',
+      '</div>',
+      '<h2 id="tools">Tools That Pay Off</h2>',
+      '<ul><li><strong>Debugger, not console.log</strong> — Breakpoints, watch expressions, call stack</li><li><strong>Network tab</strong> — What request actually failed and what did it return?</li><li><strong>Performance profiler</strong> — Where is time actually spent?</li><li><strong>Git bisect</strong> — When did this break? Binary search commits.</li></ul>',
+      '<h2 id="conclusion">The Takeaway</h2>',
+      '<p>Debugging is disciplined curiosity. Stay calm, form hypotheses, test them methodically. The bug is always logical — you just have not found the logic yet.</p>'
+    ])
+  },
+  { id:15, title:'The Art of Saying No to Features', excerpt:'Every feature you ship has a cost. Great product teams say no to 90% of ideas. Here is how to know which 10% to say yes to.', category:'business', catLabel:'Business', level:'beginner', image:'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80', author:'omar', date:'Feb 8, 2025', readTime:'8 min', views:'5.7k', tags:['product','strategy','business','prioritization'],
+    content: c([
+      '<p>Every feature you ship has a cost: development time, code complexity, cognitive load, documentation, support burden. Most features do not pay for themselves.</p>',
+      '<h2 id="cost">The True Cost of a Feature</h2>',
+      '<ul><li><strong>Build cost</strong> — Engineering and design time</li><li><strong>Maintenance cost</strong> — Bugs, updates, security patches</li><li><strong>Cognitive cost</strong> — Users have more to learn</li><li><strong>Opportunity cost</strong> — What else you could have built</li></ul>',
+      '<div class="callout info"><div class="co-ico">📊</div><div class="co-body"><strong>Research Finding</strong>In most SaaS products, 60-80% of features are used by fewer than 5% of users.</div></div>',
+      '<h2 id="framework">The Saying-No Framework</h2>',
+      '<div class="steps">',
+      '<div class="step"><div class="step-num">1</div><div class="step-body"><h4>Who asked for it?</h4><p>One enterprise customer, or a hundred users? Volume matters.</p></div></div>',
+      '<div class="step"><div class="step-num">2</div><div class="step-body"><h4>What problem does it solve?</h4><p>If the answer is not a specific, painful problem, say no.</p></div></div>',
+      '<div class="step"><div class="step-num">3</div><div class="step-body"><h4>What will it cost to maintain?</h4><p>Features are not free after shipping. They are ongoing obligations.</p></div></div>',
+      '<div class="step"><div class="step-num">4</div><div class="step-body"><h4>Does it fit the product vision?</h4><p>Features that dilute your product are worse than no features.</p></div></div>',
+      '</div>',
+      '<blockquote>The most successful products are not the ones with the most features. They are the ones that do one thing exceptionally well.</blockquote>',
+      '<h2 id="conclusion">The Takeaway</h2>',
+      '<p>Saying no is a superpower. The teams that win are the ones that ship fewer, better things — with obsessive focus on quality and craft.</p>'
+    ])
+  },
+  { id:16, title:'Serverless in Production: Lessons From the Trenches', excerpt:'Real-world lessons from running serverless in production. Cold starts, cost surprises, debugging challenges, and where it actually shines.', category:'technology', catLabel:'Technology', level:'advanced', image:'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80', author:'nina', date:'Feb 5, 2025', readTime:'13 min', views:'9.2k', tags:['serverless','aws','architecture','cloud'],
+    content: c([
+      '<p>Serverless promises infinite scale, zero ops, and pay-per-use pricing. The reality is more nuanced. Here is what I have learned running serverless in production for three years.</p>',
+      '<h2 id="shines">Where Serverless Shines</h2>',
+      '<ul><li><strong>Spiky traffic</strong> — Perfect for unpredictable loads</li><li><strong>Event-driven workflows</strong> — Webhooks, cron, message processing</li><li><strong>Prototypes and MVPs</strong> — Ship fast without infrastructure</li><li><strong>Small APIs</strong> — Under a few million requests per month, cost-efficient</li></ul>',
+      '<h2 id="challenges">Where It Struggles</h2>',
+      '<h3 id="cold-starts">Cold Starts</h3>',
+      '<p>Not a problem for most apps, deadly for latency-sensitive ones. Mitigations: provisioned concurrency, keeping functions warm, moving to edge runtimes.</p>',
+      '<h3 id="cost">Cost Surprises</h3>',
+      '<p>Serverless is cheap until it is not. At scale, serverless can cost 3-10x more than containers.</p>',
+      '<div class="comparison-table-wrap"><table class="comparison-table">',
+      '<thead><tr><th>Scale</th><th>Serverless</th><th>Containers</th></tr></thead>',
+      '<tbody><tr><td>MVP</td><td>$5/mo</td><td>$30/mo</td></tr>',
+      '<tr><td>Mid</td><td>$300/mo</td><td>$200/mo</td></tr>',
+      '<tr><td>Large</td><td>$5,000/mo</td><td>$1,200/mo</td></tr></tbody>',
+      '</table></div>',
+      '<div class="callout warning"><div class="co-ico">⚠️</div><div class="co-body"><strong>Pro Tip</strong>Always set spending limits and alerts. One misconfigured function can generate a $10k bill in hours.</div></div>',
+      '<h2 id="conclusion">The Takeaway</h2>',
+      '<p>Serverless is a tool, not a religion. Use it where it fits. Move to containers when cost or performance demands it.</p>'
+    ])
+  },
+  { id:17, featured:true, title:'Pricing Your SaaS: The Complete Framework', excerpt:'A comprehensive guide to SaaS pricing — value metrics, tier structures, anchoring, expansion revenue, and the psychology of price.', category:'business', catLabel:'Business', level:'intermediate', image:'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80', author:'omar', date:'Feb 3, 2025', readTime:'16 min', views:'11.9k', tags:['saas','pricing','business','strategy'], series:'indieSaaS', seriesPart:2,
+    content: c([
+      '<p>Pricing is the single highest-leverage decision in SaaS. Get it right and everything else becomes easier.</p>',
+      '<h2 id="value-metric">The Value Metric</h2>',
+      '<p>The first question is not "how much?" It is "what are we charging for?" The value metric should scale with the value customers receive.</p>',
+      '<ul><li><strong>Per user</strong> — Slack, Notion, Linear</li><li><strong>Per usage</strong> — AWS, Stripe, Twilio</li><li><strong>Per feature</strong> — Most B2B SaaS</li><li><strong>Per outcome</strong> — Zapier, Intercom</li></ul>',
+      '<div class="callout tip"><div class="co-ico">💡</div><div class="co-body"><strong>The Test</strong>When a customer doubles their usage, does your price double? If yes, you have found your value metric.</div></div>',
+      '<h2 id="tiers">Tier Structure</h2>',
+      '<p>Three tiers is the sweet spot. Here is why:</p>',
+      '<ol><li><strong>Anchoring</strong> — The highest tier makes the middle feel reasonable</li><li><strong>Choice paralysis</strong> — More than 3 tiers overwhelms buyers</li><li><strong>Upgrade path</strong> — Clear progression from starter to power user</li></ol>',
+      '<h2 id="pricing-psychology">The Psychology of Price</h2>',
+      '<p><strong>Charm pricing is a myth.</strong> $99 does not feel meaningfully cheaper than $100 in B2B. Round numbers feel more confident.</p>',
+      '<blockquote>Charge more than feels comfortable. You can always lower prices — raising them is brutal.</blockquote>',
+      '<h2 id="conclusion">The Takeaway</h2>',
+      '<p>Pricing is a product decision, not a finance decision. Treat it as such.</p>'
+    ])
+  },
+  { id:18, title:'Building in Public: A Year of Shipping and Sharing', excerpt:'What I learned from building in public for 12 months — revenue transparency, audience building, unexpected opportunities, and the dark side of constant sharing.', category:'business', catLabel:'Business', level:'beginner', image:'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=800&q=80', author:'omar', date:'Jan 30, 2025', readTime:'10 min', views:'6.4k', tags:['indie','build-in-public','career','startups'],
+    content: c([
+      '<p>Building in public changed my career. It also almost burned me out. Here is the balanced truth about sharing your work as you build.</p>',
+      '<h2 id="wins">The Wins</h2>',
+      '<ul><li><strong>Audience before product</strong> — 1,000 followers when you launch is worth millions of ad impressions</li><li><strong>Real feedback</strong> — Users tell you what they want before you build it</li><li><strong>Accountability</strong> — Publicly committing to goals makes you ship</li><li><strong>Opportunities</strong> — Speaking, writing, podcast invitations, consulting offers</li></ul>',
+      '<h2 id="realities">The Realities</h2>',
+      '<div class="callout warning"><div class="co-ico">⚠️</div><div class="co-body"><strong>Dark Side</strong>Constant public metrics create constant pressure. Vanity metrics can mislead. Not every update needs an announcement.</div></div>',
+      '<p>Three honest challenges:</p>',
+      '<ol><li><strong>Comparison trap</strong> — Seeing others wins constantly can wreck your motivation</li><li><strong>Burnout risk</strong> — Sharing takes energy that could go to building</li><li><strong>Privacy loss</strong> — Your business becomes public record</li></ol>',
+      '<h2 id="framework">What I Would Do Differently</h2>',
+      '<div class="steps">',
+      '<div class="step"><div class="step-num">1</div><div class="step-body"><h4>Share less frequently</h4><p>Weekly updates, not daily. Quality over quantity.</p></div></div>',
+      '<div class="step"><div class="step-num">2</div><div class="step-body"><h4>Share fewer numbers</h4><p>Revenue transparency is overrated. Share insights, not just metrics.</p></div></div>',
+      '<div class="step"><div class="step-num">3</div><div class="step-body"><h4>Protect deep work</h4><p>Some weeks, close the laptop lid and just build.</p></div></div>',
+      '<div class="step"><div class="step-num">4</div><div class="step-body"><h4>Focus on customers</h4><p>100 true fans beat 10,000 spectators.</p></div></div>',
+      '</div>',
+      '<h2 id="conclusion">The Takeaway</h2>',
+      '<p>Building in public is a powerful strategy — but only if you do it on your terms. Share what serves you and your customers. Ignore the rest.</p>'
+    ])
+  },
+  {
+    id: 19,
+    title: 'The Complete Guide to Web Accessibility (a11y) in 2025',
+    excerpt: 'Everything you need to know about building accessible web applications — from ARIA to keyboard navigation, screen readers, color contrast, and legal compliance. With real code examples.',
+    category: 'tutorial', catLabel: 'Tutorial', level: 'intermediate',
+    image: 'https://images.unsplash.com/photo-1587440871875-191322ee64b0?w=800&q=80',
+    author: 'nina', date: 'Jan 26, 2025', readTime: '20 min', views: '13.6k',
+    tags: ['accessibility','a11y','aria','ux'],
+    content: c([
+      '<p>Web accessibility (often abbreviated as a11y — "a" + 11 letters + "y") is not an optional feature. It is a fundamental requirement of building for the web. Yet most developers treat it as an afterthought.</p>',
+      '<p>This guide will change that. By the end, you will understand the core principles of accessibility, the tools to test it, and the practical patterns to implement it — starting today.</p>',
+      '<h2 id="why">Why Accessibility Matters</h2>',
+      '<p>There are three compelling reasons to build accessible websites:</p>',
+      '<ul><li><strong>Ethical</strong> — 1 in 6 people worldwide live with some form of disability. The web should work for everyone.</li><li><strong>Legal</strong> — Laws like WCAG 2.2, ADA, and Section 508 require accessibility in many jurisdictions. Lawsuits are on the rise.</li><li><strong>Business</strong> — Accessible sites rank better on SEO, have larger audiences, and often have better UX for everyone.</li></ul>',
+      '<div class="callout info"><div class="co-ico">📊</div><div class="co-body"><strong>By the Numbers</strong>Over 1 billion people worldwide have a disability. Accessible sites can serve up to 20% more users without any extra marketing spend.</div></div>',
+      '<h2 id="pillars">The Four Pillars (WCAG POUR)</h2>',
+      '<p>WCAG (Web Content Accessibility Guidelines) defines four core principles, known by the acronym <strong>POUR</strong>:</p>',
+      '<div class="steps">',
+      '<div class="step"><div class="step-num">1</div><div class="step-body"><h4>Perceivable</h4><p>Information must be presentable in ways users can perceive. Text alternatives for images, captions for video, sufficient contrast.</p></div></div>',
+      '<div class="step"><div class="step-num">2</div><div class="step-body"><h4>Operable</h4><p>Interface components must be operable. Keyboard navigation, enough time, no seizure-triggering content.</p></div></div>',
+      '<div class="step"><div class="step-num">3</div><div class="step-body"><h4>Understandable</h4><p>Information and operation must be understandable. Readable text, predictable behavior, input assistance.</p></div></div>',
+      '<div class="step"><div class="step-num">4</div><div class="step-body"><h4>Robust</h4><p>Content must work with current and future tools. Valid HTML, proper ARIA usage, assistive technology support.</p></div></div>',
+      '</div>',
+      '<h2 id="semantic">Start With Semantic HTML</h2>',
+      '<p>Before reaching for ARIA, use the right HTML element. Semantic HTML gives you accessibility for free.</p>',
+      '<div class="code-block"><div class="code-header"><span class="code-lang">html</span><button class="code-copy" onclick="copyCode(this)">📋 Copy</button></div>',
+      '<pre><span class="c">&lt;!-- ❌ Bad: Div soup --&gt;</span>\n',
+      '<span class="p">&lt;div</span> <span class="f">onclick</span>=<span class="s">"submit()"</span><span class="p">&gt;</span>Submit<span class="p">&lt;/div&gt;</span>\n\n',
+      '<span class="c">&lt;!-- ✅ Good: Semantic button --&gt;</span>\n',
+      '<span class="p">&lt;button</span> <span class="f">type</span>=<span class="s">"submit"</span><span class="p">&gt;</span>Submit<span class="p">&lt;/button&gt;</span></pre></div>',
+      '<div class="callout tip"><div class="co-ico">💡</div><div class="co-body"><strong>Rule of Thumb</strong>The first rule of ARIA is: don\'t use ARIA. Use native HTML elements whenever possible. They come with accessibility built in.</div></div>',
+      '<h2 id="keyboard">Keyboard Navigation</h2>',
+      '<p>Every interactive element must be reachable and operable with the keyboard alone. Test by unplugging your mouse.</p>',
+      '<ul><li><strong>Tab</strong> — Move forward through interactive elements</li><li><strong>Shift+Tab</strong> — Move backward</li><li><strong>Enter / Space</strong> — Activate buttons and links</li><li><strong>Arrow keys</strong> — Navigate within components like menus and tabs</li><li><strong>Escape</strong> — Close modals and dropdowns</li></ul>',
+      '<h2 id="aria">When to Use ARIA</h2>',
+      '<p>ARIA (Accessible Rich Internet Applications) is a set of attributes that extend HTML when semantics are not enough.</p>',
+      '<div class="code-block"><div class="code-header"><span class="code-lang">html</span><button class="code-copy" onclick="copyCode(this)">📋 Copy</button></div>',
+      '<pre><span class="c">&lt;!-- Live region: announce changes to screen readers --&gt;</span>\n',
+      '<span class="p">&lt;div</span> <span class="f">aria-live</span>=<span class="s">"polite"</span><span class="p">&gt;</span>\n',
+      '  <span class="p">&lt;span&gt;</span>Item added to cart<span class="p">&lt;/span&gt;</span>\n',
+      '<span class="p">&lt;/div&gt;</span>\n\n',
+      '<span class="c">&lt;!-- Modal dialog with proper roles --&gt;</span>\n',
+      '<span class="p">&lt;div</span> <span class="f">role</span>=<span class="s">"dialog"</span> <span class="f">aria-modal</span>=<span class="s">"true"</span> <span class="f">aria-labelledby</span>=<span class="s">"title"</span><span class="p">&gt;</span>\n',
+      '  <span class="p">&lt;h2</span> <span class="f">id</span>=<span class="s">"title"</span><span class="p">&gt;</span>Confirm<span class="p">&lt;/h2&gt;</span>\n',
+      '<span class="p">&lt;/div&gt;</span></pre></div>',
+      '<h2 id="contrast">Color Contrast</h2>',
+      '<p>Text must have sufficient contrast against its background. WCAG defines minimum ratios:</p>',
+      '<div class="comparison-table-wrap"><table class="comparison-table">',
+      '<thead><tr><th>Text Size</th><th>AA Minimum</th><th>AAA Minimum</th></tr></thead>',
+      '<tbody><tr><td>Normal (below 18pt)</td><td>4.5:1</td><td>7:1</td></tr>',
+      '<tr><td>Large (18pt+ or 14pt bold)</td><td>3:1</td><td>4.5:1</td></tr>',
+      '<tr><td>UI Components</td><td>3:1</td><td>4.5:1</td></tr></tbody>',
+      '</table></div>',
+      '<div class="callout warning"><div class="co-ico">⚠️</div><div class="co-body"><strong>Common Mistake</strong>Using placeholder text as labels. Placeholders disappear when typing, leaving users with no idea what the field is for.</div></div>',
+      '<h2 id="testing">Testing Your Site</h2>',
+      '<p>You cannot fix what you cannot see. Use these tools to audit your site:</p>',
+      '<ul><li><strong>Lighthouse</strong> — Built into Chrome DevTools. Run an accessibility audit.</li><li><strong>axe DevTools</strong> — Browser extension that finds 30-50% of accessibility issues.</li><li><strong>NVDA / VoiceOver</strong> — Free screen readers. Test your site with your eyes closed.</li><li><strong>WAVE</strong> — Visual feedback on accessibility issues directly on the page.</li></ul>',
+      '<h2 id="checklist">The Quick Checklist</h2>',
+      '<ol><li>All images have meaningful alt text</li><li>All form inputs have labels</li><li>Focus states are visible</li><li>Color is not the only way to convey information</li><li>All interactive elements are keyboard accessible</li><li>Heading hierarchy is logical (h1 → h2 → h3)</li><li>Page has a descriptive title</li><li>Language attribute is set on <code>&lt;html&gt;</code></li></ol>',
+      '<blockquote>Accessibility is not a checklist. It is a mindset. The best time to think about it was day one. The second best time is now.</blockquote>',
+      '<h2 id="conclusion">Conclusion</h2>',
+      '<p>Building accessible websites is a skill — one that improves with practice. Start small: fix contrast ratios this week, add alt text next week. Six months from now, accessibility will be second nature.</p>',
+      '<p>And your users will thank you. All of them.</p>'
+    ])
+  }
+];
+
+var state = {
+  currentCategory: 'all',
+  searchQuery: '',
+  view: 'grid',
+  bookmarks: storage.get('storyhub-bookmarks', []),
+  likedPosts: storage.get('storyhub-likes', []),
+  comments: storage.get('storyhub-comments', {}),
+  currentPostId: null
+};
+
+function initTheme(){
+  var btn = $('#themeBtn');
+  var saved = storage.get('storyhub-theme', 'dark');
+  document.documentElement.setAttribute('data-theme', saved);
+  btn.textContent = saved === 'dark' ? '☀️' : '🌙';
+  btn.addEventListener('click', function(){
+    var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    btn.textContent = next === 'dark' ? '☀️' : '🌙';
+    storage.set('storyhub-theme', next);
+    toast(next === 'dark' ? '🌙 Dark mode' : '☀️ Light mode');
+  });
+}
+
+function filterPosts(){
+  return POSTS.filter(function(p){
+    var matchCat = state.currentCategory === 'all' || p.category === state.currentCategory;
+    var q = state.searchQuery.toLowerCase().trim();
+    var matchSearch = !q ||
+      p.title.toLowerCase().indexOf(q) > -1 ||
+      p.excerpt.toLowerCase().indexOf(q) > -1 ||
+      p.tags.some(function(t){ return t.toLowerCase().indexOf(q) > -1; });
+    return matchCat && matchSearch;
+  });
+}
+
+function renderCategories(){
+  $('#categoryFilters').innerHTML = CATEGORIES.map(function(c){
+    return '<button class="chip ' + (c.id === state.currentCategory ? 'active' : '') + '" data-cat="' + c.id + '">' + c.label + '</button>';
+  }).join('');
+  $$('.chip').forEach(function(chip){
+    chip.addEventListener('click', function(){
+      $$('.chip').forEach(function(c){ c.classList.remove('active'); });
+      chip.classList.add('active');
+      state.currentCategory = chip.dataset.cat;
+      renderPosts();
+    });
+  });
+}
+
+function renderPosts(){
+  var grid = $('#postsGrid');
+  var filtered = filterPosts();
+  $('#resultCount').textContent = filtered.length;
+
+  if (filtered.length === 0){
+    grid.innerHTML = '<div class="empty-state"><div class="ico">🔍</div><h3>No articles found</h3><p>Try a different search or category</p></div>';
+    return;
+  }
+
+  var featured = (state.currentCategory === 'all' && !state.searchQuery)
+    ? filtered.filter(function(p){ return p.featured; })[0] : null;
+  var rest = featured ? filtered.filter(function(p){ return p.id !== featured.id; }) : filtered;
+
+  var html = '';
+  if (featured) html += renderFeatured(featured);
+  html += rest.map(renderCard).join('');
+  grid.innerHTML = html;
+
+  $$('.post-card, .featured-post').forEach(function(el){
+    el.addEventListener('click', function(){ openArticle(parseInt(el.dataset.id, 10)); });
+  });
+}
+
+function renderFeatured(p){
+  var a = AUTHORS[p.author];
+  var seriesInfo = p.series ? SERIES[p.series] : null;
+  return '<article class="featured-post fx-fade" data-id="' + p.id + '">' +
+    '<div class="featured-thumb"><img src="' + p.image + '" alt="' + esc(p.title) + '" loading="lazy" /></div>' +
+    '<div class="featured-body">' +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+        '<span class="post-badge">⭐ Featured</span>' +
+        (seriesInfo ? '<span class="series-badge">📚 ' + esc(seriesInfo.title) + '</span>' : '') +
+      '</div>' +
+      '<div class="post-meta">' +
+        '<div class="author"><div class="avatar">' + a.avatar + '</div><span>' + a.name + '</span></div>' +
+        '<span class="dot">·</span><span>' + p.date + '</span><span class="dot">·</span><span>⏱ ' + p.readTime + '</span>' +
+      '</div>' +
+      '<h2 class="post-title" style="font-size:1.35rem;">' + esc(p.title) + '</h2>' +
+      '<p class="post-excerpt" style="-webkit-line-clamp:4;">' + esc(p.excerpt) + '</p>' +
+      '<div class="post-footer"><span class="read-time">📖 ' + p.catLabel + '</span><span class="views">👁 ' + p.views + '</span></div>' +
+    '</div></article>';
+}
+
+function renderCard(p){
+  var a = AUTHORS[p.author];
+  var levelClass = p.level === 'advanced' ? 'advanced' : (p.level === 'intermediate' ? 'intermediate' : '');
+  var levelLabel = p.level ? p.level.charAt(0).toUpperCase() + p.level.slice(1) : '';
+  var seriesInfo = p.series ? SERIES[p.series] : null;
+  return '<article class="post-card fx-fade" data-id="' + p.id + '">' +
+    '<div class="post-thumb"><img src="' + p.image + '" alt="' + esc(p.title) + '" loading="lazy" />' +
+      '<span class="cat-pill">' + p.catLabel + '</span>' +
+      (p.level ? '<span class="level-pill ' + levelClass + '">' + levelLabel + '</span>' : '') +
+    '</div>' +
+    '<div class="post-body">' +
+      (seriesInfo ? '<span class="series-badge">📚 Part ' + p.seriesPart + ' · ' + esc(seriesInfo.title) + '</span>' : '') +
+      '<div class="post-meta"><div class="author"><div class="avatar">' + a.avatar + '</div><span>' + a.name + '</span></div>' +
+      '<span class="dot">·</span><span>' + p.date + '</span></div>' +
+      '<h3 class="post-title">' + esc(p.title) + '</h3>' +
+      '<p class="post-excerpt">' + esc(p.excerpt) + '</p>' +
+      '<div class="post-footer"><span class="read-time">⏱ ' + p.readTime + '</span><span class="views">👁 ' + p.views + '</span></div>' +
+    '</div></article>';
+}
+
+function renderSeries(){
+  var html = '';
+  for (var key in SERIES){
+    if (!SERIES.hasOwnProperty(key)) continue;
+    var s = SERIES[key];
+    html += '<div class="series-item" data-series="' + key + '">' +
+      '<div class="series-num">' + s.posts.length + '</div>' +
+      '<div><div class="series-title">' + esc(s.title) + '</div>' +
+      '<div style="font-size:.7rem;color:var(--muted);font-weight:600;margin-top:2px;">' + esc(s.desc) + '</div></div>' +
+      '</div>';
+  }
+  $('#seriesList').innerHTML = html;
+  $$('.series-item').forEach(function(el){
+    el.addEventListener('click', function(){
+      var s = SERIES[el.dataset.series];
+      openArticle(s.posts[0]);
+    });
+  });
+}
+
+function renderTrending(){
+  var top = POSTS.slice().sort(function(a,b){ return parseFloat(b.views) - parseFloat(a.views); }).slice(0, 5);
+  $('#trendingList').innerHTML = top.map(function(p, i){
+    return '<div class="trending-item" data-id="' + p.id + '">' +
+      '<div class="trending-num">' + String(i+1).padStart(2,'0') + '</div>' +
+      '<div class="trending-content"><div class="trending-title">' + esc(p.title) + '</div>' +
+      '<div class="trending-meta">' + p.catLabel + ' · ' + p.readTime + '</div></div>' +
+      '</div>';
+  }).join('');
+  $$('.trending-item').forEach(function(el){
+    el.addEventListener('click', function(){ openArticle(parseInt(el.dataset.id, 10)); });
+  });
+}
+
+function renderTags(){
+  $('#tagCloud').innerHTML = TAGS.map(function(t){
+    return '<span class="tag" data-tag="' + t.name + '">#' + t.name + '<span class="count">' + t.count + '</span></span>';
+  }).join('');
+  $$('.tag').forEach(function(el){
+    el.addEventListener('click', function(){
+      $('#searchInput').value = el.dataset.tag;
+      state.searchQuery = el.dataset.tag;
+      $('#clearBtn').classList.remove('hidden');
+      renderPosts();
+      closeArticle();
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+}
+
+function updateBookmarkCount(){
+  var c = state.bookmarks.length;
+  $('#bmCount').textContent = c;
+  $('#bmCount').style.display = c > 0 ? 'grid' : 'none';
+  $('#bmPanelCount').textContent = c;
+}
+
+function renderBookmarksPanel(){
+  var list = $('#bmList');
+  if (state.bookmarks.length === 0){
+    list.innerHTML = '<div class="bm-empty">' +
+      '<div class="ico">🔖</div>' +
+      '<h4>No saved articles yet</h4>' +
+      '<p>Click the bookmark icon on any article to save it here for later reading.</p>' +
+      '</div>';
+    return;
+  }
+  var items = [];
+  for (var i = state.bookmarks.length - 1; i >= 0; i--){
+    var id = state.bookmarks[i];
+    var post = null;
+    for (var j = 0; j < POSTS.length; j++){ if (POSTS[j].id === id){ post = POSTS[j]; break; } }
+    if (!post) continue;
+    items.push(post);
+  }
+  list.innerHTML = items.map(function(p){
+    return '<div class="bm-item" data-bm-id="' + p.id + '">' +
+      '<div class="bm-thumb"><img src="' + p.image + '" alt="' + esc(p.title) + '" loading="lazy" /></div>' +
+      '<div class="bm-info">' +
+        '<div class="bm-cat">' + p.catLabel + ' · ' + p.readTime + '</div>' +
+        '<div class="bm-title">' + esc(p.title) + '</div>' +
+        '<div class="bm-meta"><span>📅 ' + p.date + '</span><span>👁 ' + p.views + '</span></div>' +
+      '</div>' +
+      '<button class="bm-remove" data-remove-id="' + p.id + '" aria-label="Remove">🗑️</button>' +
+    '</div>';
+  }).join('');
+
+  $$('.bm-item').forEach(function(el){
+    el.addEventListener('click', function(e){
+      if (e.target.closest('.bm-remove')) return;
+      closeBookmarks();
+      openArticle(parseInt(el.dataset.bmId, 10));
+    });
+  });
+  $$('.bm-remove').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var id = parseInt(btn.dataset.removeId, 10);
+      var idx = state.bookmarks.indexOf(id);
+      if (idx > -1) state.bookmarks.splice(idx, 1);
+      storage.set('storyhub-bookmarks', state.bookmarks);
+      updateBookmarkCount();
+      renderBookmarksPanel();
+      toast('🗑️ Removed from bookmarks');
+    });
+  });
+}
+
+function openBookmarks(){
+  renderBookmarksPanel();
+  $('#bmOverlay').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+function closeBookmarks(){
+  $('#bmOverlay').classList.remove('on');
+  document.body.style.overflow = '';
+}
+
+function openArticle(id){
+  var post = null;
+  for (var i = 0; i < POSTS.length; i++){ if (POSTS[i].id === id){ post = POSTS[i]; break; } }
+  if (!post) return;
+  state.currentPostId = id;
+  var a = AUTHORS[post.author];
+  var isBookmarked = state.bookmarks.indexOf(id) > -1;
+  var isLiked = state.likedPosts.indexOf(id) > -1;
+  var postComments = state.comments[id] || [
+    { name: 'Jordan Lee', avatar: 'JL', time: '2 hours ago', text: 'Fantastic article. Bookmarked and shared with my team!' },
+    { name: 'Priya Sharma', avatar: 'PS', time: '5 hours ago', text: 'Finally a guide that goes beyond the surface. Thank you!' }
+  ];
+  if (!state.comments[id]) state.comments[id] = postComments;
+
+  var tocItems = [];
+  var tempDiv = document.createElement('div');
+  tempDiv.innerHTML = post.content;
+  var headings = tempDiv.querySelectorAll('h2, h3');
+  for (var h = 0; h < headings.length; h++){
+    if (headings[h].id) tocItems.push({ id: headings[h].id, text: headings[h].textContent.trim(), level: headings[h].tagName.toLowerCase() });
+  }
+
+  var seriesNav = '';
+  if (post.series){
+    var series = SERIES[post.series];
+    var snHtml = '';
+    for (var s = 0; s < series.posts.length; s++){
+      var pid = series.posts[s];
+      var sp = null;
+      for (var k = 0; k < POSTS.length; k++){ if (POSTS[k].id === pid){ sp = POSTS[k]; break; } }
+      if (!sp) continue;
+      snHtml += '<div class="sn-item ' + (pid === post.id ? 'current' : '') + '" data-series-post="' + pid + '">' +
+        '<div class="sn-num">' + (s+1) + '</div><span>' + esc(sp.title) + '</span></div>';
+    }
+    seriesNav = '<div class="series-nav"><div class="sn-head">📚 ' + esc(series.title) + ' · Part ' + post.seriesPart + ' of ' + series.posts.length + '</div>' +
+      '<div class="sn-list">' + snHtml + '</div></div>';
+  }
+
+  var related = POSTS.filter(function(p){ return p.id !== id && p.category === post.category; }).slice(0, 3);
+  var relatedFinal = related.length >= 3 ? related : POSTS.filter(function(p){ return p.id !== id; }).slice(0, 3);
+
+  var levelLabel = post.level ? post.level.charAt(0).toUpperCase() + post.level.slice(1) : '';
+
+  var tocHtml = tocItems.map(function(t){
+    return '<div class="toc-item ' + t.level + '" data-toc="' + t.id + '">' + esc(t.text) + '</div>';
+  }).join('');
+
+  var relatedHtml = relatedFinal.map(function(r){
+    var ra = AUTHORS[r.author];
+    return '<article class="post-card" data-related="' + r.id + '" style="cursor:pointer;">' +
+      '<div class="post-thumb"><img src="' + r.image + '" alt="' + esc(r.title) + '" loading="lazy" /><span class="cat-pill">' + r.catLabel + '</span></div>' +
+      '<div class="post-body"><div class="post-meta"><div class="author"><div class="avatar">' + ra.avatar + '</div><span>' + ra.name + '</span></div></div>' +
+      '<h3 class="post-title" style="font-size:.95rem;">' + esc(r.title) + '</h3></div></article>';
+  }).join('');
+
+  var commentsHtml = renderComments(postComments);
+
+  $('#articleView').innerHTML =
+    '<button class="btn-back" style="margin-bottom:16px;" onclick="closeArticle()"><span>←</span> <span>Back to Home</span></button>' +
+    '<div class="article-layout">' +
+      '<aside class="toc"><div class="toc-title">📑 On This Page</div><div class="toc-list" id="tocList">' + tocHtml + '</div></aside>' +
+      '<div>' +
+        '<article class="article-view">' +
+          '<div class="article-hero">' +
+            '<img src="' + post.image + '" alt="' + esc(post.title) + '" />' +
+            '<div class="article-hero-content">' +
+              '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">' +
+                '<span class="cat">' + post.catLabel + '</span>' +
+                (post.level ? '<span class="cat" style="background:var(--brand-warning);color:#1a1a1a;">' + levelLabel + '</span>' : '') +
+              '</div>' +
+              '<h1>' + esc(post.title) + '</h1>' +
+              '<div class="meta">' +
+                '<div class="author"><div class="avatar">' + a.avatar + '</div><span>' + a.name + '</span></div>' +
+                '<span>·</span><span>' + post.date + '</span><span>·</span><span>⏱ ' + post.readTime + '</span><span>·</span><span>👁 ' + post.views + '</span>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="article-content" id="articleBody">' +
+            post.content +
+            seriesNav +
+            '<div class="article-tags">' + post.tags.map(function(t){ return '<span class="tag">#' + t + '</span>'; }).join('') + '</div>' +
+            '<div class="article-actions">' +
+              '<button class="action-btn ' + (isLiked ? 'liked' : '') + '" id="likeBtn">' + (isLiked ? '❤️' : '🤍') + ' <span>' + (isLiked ? 'Liked' : 'Like') + '</span></button>' +
+              '<button class="action-btn" id="shareBtn">🔗 Share</button>' +
+              '<button class="action-btn ' + (isBookmarked ? 'liked' : '') + '" id="bmBtn">' + (isBookmarked ? '🔖' : '📑') + ' <span>' + (isBookmarked ? 'Bookmarked' : 'Bookmark') + '</span></button>' +
+            '</div>' +
+            '<div class="author-box">' +
+              '<div class="avatar-lg">' + a.avatar + '</div>' +
+              '<div class="info"><h4>' + a.name + '</h4><div class="role">' + a.role + '</div><p>' + esc(a.bio) + '</p></div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="comments-section">' +
+            '<div class="comments-head"><h3>💬 Comments</h3><span class="count" id="commentCount">' + postComments.length + '</span></div>' +
+            '<div class="comment-form"><textarea id="commentText" placeholder="Share your thoughts..."></textarea>' +
+            '<div class="row"><button id="postCommentBtn">Post Comment</button></div></div>' +
+            '<div id="commentsList">' + commentsHtml + '</div>' +
+          '</div>' +
+          '<div class="related-section"><div class="related-head">📚 Related Articles</div><div class="related-grid">' + relatedHtml + '</div></div>' +
+        '</article>' +
+      '</div>' +
+    '</div>';
+
+  $('#homeView').classList.add('hidden');
+  $('#articleView').classList.remove('hidden');
+  window.scrollTo({top:0, behavior:'smooth'});
+
+  $('#tocMobileList').innerHTML = tocHtml;
+
+  $('#likeBtn').addEventListener('click', function(){ toggleLike(id); });
+  $('#bmBtn').addEventListener('click', function(){ toggleBookmark(id); });
+  $('#shareBtn').addEventListener('click', function(){ shareArticle(post); });
+  $('#postCommentBtn').addEventListener('click', function(){ postComment(id); });
+
+  $$('[data-related]').forEach(function(el){ el.addEventListener('click', function(){ openArticle(parseInt(el.dataset.related, 10)); }); });
+  $$('[data-series-post]').forEach(function(el){ el.addEventListener('click', function(){ openArticle(parseInt(el.dataset.seriesPost, 10)); }); });
+  $$('.toc-item').forEach(function(el){
+    el.addEventListener('click', function(){
+      var target = document.getElementById(el.dataset.toc);
+      if (target){ target.scrollIntoView({behavior:'smooth', block:'start'}); closeMobileToc(); }
+    });
+  });
+  $$('.code-copy').forEach(function(btn){ btn.onclick = function(){ copyCode(this); }; });
+
+  setupTocSpy();
+  history.replaceState(null, '', '#post-' + id);
+}
+
+function renderComments(comments){
+  return comments.map(function(c){
+    return '<div class="comment-item"><div class="comment-avatar">' + esc(c.avatar) + '</div>' +
+      '<div class="comment-body"><div class="head"><span class="name">' + esc(c.name) + '</span><span class="time">' + esc(c.time) + '</span></div>' +
+      '<div class="text">' + esc(c.text) + '</div></div></div>';
+  }).join('');
+}
+
+function postComment(id){
+  var textarea = $('#commentText');
+  var text = textarea.value.trim();
+  if (!text){ toast('✏️ Write a comment first'); return; }
+  var newComment = { name: 'You', avatar: 'YO', time: 'Just now', text: text };
+  state.comments[id] = (state.comments[id] || []).concat([newComment]);
+  storage.set('storyhub-comments', state.comments);
+  var list = $('#commentsList');
+  if (list){ list.innerHTML = renderComments(state.comments[id]); $('#commentCount').textContent = state.comments[id].length; }
+  textarea.value = '';
+  toast('✓ Comment posted!');
+}
+
+function shareArticle(post){
+  if (navigator.share){
+    navigator.share({ title: post.title, text: post.excerpt, url: window.location.href }).catch(function(){});
+  } else if (navigator.clipboard){
+    navigator.clipboard.writeText(post.title).then(function(){ toast('🔗 Copied!'); }).catch(function(){ fallbackCopy(post.title, function(){ toast('🔗 Copied!'); }); });
+  } else {
+    fallbackCopy(post.title, function(){ toast('🔗 Copied!'); });
+  }
+}
+
+function closeArticle(){
+  $('#articleView').classList.add('hidden');
+  $('#homeView').classList.remove('hidden');
+  history.replaceState(null, '', '#');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function setupTocSpy(){
+  var headings = $$('#articleBody h2[id], #articleBody h3[id]');
+  var tocItems = $$('.toc-item');
+  if (!headings.length || !tocItems.length) return;
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){
+        tocItems.forEach(function(t){ t.classList.toggle('active', t.dataset.toc === e.target.id); });
+      }
+    });
+  }, {rootMargin:'-110px 0px -70% 0px'});
+  headings.forEach(function(h){ obs.observe(h); });
+}
+
+function copyCode(btn){
+  var block = btn.closest('.code-block');
+  if (!block) return;
+  var code = block.querySelector('pre').textContent;
+  var done = function(){
+    var orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(function(){ btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(code).then(done).catch(function(){ fallbackCopy(code, done); });
+  } else {
+    fallbackCopy(code, done);
+  }
+}
+
+function toggleLike(id){
+  var idx = state.likedPosts.indexOf(id);
+  if (idx > -1) state.likedPosts.splice(idx, 1);
+  else state.likedPosts.push(id);
+  storage.set('storyhub-likes', state.likedPosts);
+  var btn = $('#likeBtn');
+  if (btn){
+    var isLiked = state.likedPosts.indexOf(id) > -1;
+    btn.classList.toggle('liked', isLiked);
+    btn.innerHTML = (isLiked ? '❤️' : '🤍') + ' <span>' + (isLiked ? 'Liked' : 'Like') + '</span>';
+  }
+  toast(idx > -1 ? '💔 Unliked' : '❤️ Liked!');
+}
+
+function toggleBookmark(id){
+  var idx = state.bookmarks.indexOf(id);
+  if (idx > -1){ state.bookmarks.splice(idx, 1); toast('📑 Bookmark removed'); }
+  else { state.bookmarks.push(id); toast('🔖 Added to bookmarks!'); }
+  storage.set('storyhub-bookmarks', state.bookmarks);
+  updateBookmarkCount();
+  var btn = $('#bmBtn');
+  if (btn){
+    var isBookmarked = state.bookmarks.indexOf(id) > -1;
+    btn.classList.toggle('liked', isBookmarked);
+    btn.innerHTML = (isBookmarked ? '🔖' : '📑') + ' <span>' + (isBookmarked ? 'Bookmarked' : 'Bookmark') + '</span>';
+  }
+  if ($('#bmOverlay').classList.contains('on')) renderBookmarksPanel();
+}
+
+function initSearch(){
+  var input = $('#searchInput'), clear = $('#clearBtn');
+  input.addEventListener('input', function(){
+    state.searchQuery = input.value;
+    clear.classList.toggle('hidden', !input.value);
+    renderPosts();
+  });
+  clear.addEventListener('click', function(){
+    input.value = ''; state.searchQuery = ''; clear.classList.add('hidden'); renderPosts();
+  });
+}
+
+function initViewToggle(){
+  $$('.view-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      $$('.view-btn').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      state.view = btn.dataset.view;
+      renderPosts();
+    });
+  });
+}
+
+function initTopNav(){
+  $$('.top-nav a').forEach(function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      $$('.top-nav a').forEach(function(l){ l.classList.remove('active'); });
+      link.classList.add('active');
+      if (state.currentPostId) closeArticle();
+      state.currentCategory = link.dataset.cat || 'all';
+      $$('.chip').forEach(function(c){ c.classList.toggle('active', c.dataset.cat === state.currentCategory); });
+      renderPosts();
+    });
+  });
+}
+
+function initNewsletter(){
+  $('#newsBtn').addEventListener('click', function(){
+    var email = $('#newsEmail').value.trim();
+    if (!email || email.indexOf('@') < 0){ toast('📧 Enter a valid email'); return; }
+    toast('✓ Subscribed successfully!');
+    $('#newsEmail').value = '';
+  });
+}
+
+function openMobileToc(){
+  $('#tocMobileOverlay').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+function closeMobileToc(){
+  $('#tocMobileOverlay').classList.remove('on');
+  document.body.style.overflow = '';
+}
+
+function onScroll(){
+  var y = window.scrollY;
+  var h = document.documentElement.scrollHeight - window.innerHeight;
+  $('#readFill').style.width = (h > 0 ? (y / h) * 100 : 0) + '%';
+  $('#toTop').classList.toggle('show', y > 500);
+  var bar = $('#topbar');
+  if (bar){
+    if (y - (bar._lastY || 0) > 8 && y > 200) bar.classList.add('nav-hidden');
+    else if (y - (bar._lastY || 0) < -8 || y < 100) bar.classList.remove('nav-hidden');
+    bar._lastY = y;
+  }
+}
+var ticking = false;
+window.addEventListener('scroll', function(){
+  if (!ticking){ requestAnimationFrame(function(){ onScroll(); ticking = false; }); ticking = true; }
+}, {passive:true});
+
+function initCounters(){
+  if (!('IntersectionObserver' in window)){
+    $$('.hero-stat .num').forEach(function(el){ el.textContent = el.dataset.count; });
+    return;
+  }
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (!e.isIntersecting) return;
+      var el = e.target;
+      var target = parseInt(el.dataset.count, 10);
+      var n = 0;
+      var step = Math.max(1, Math.ceil(target / 40));
+      var t = setInterval(function(){
+        n += step;
+        if (n >= target){ el.textContent = target; clearInterval(t); }
+        else el.textContent = n;
+      }, 30);
+      obs.unobserve(el);
+    });
+  }, {threshold:0.6});
+  $$('.hero-stat .num').forEach(function(el){ obs.observe(el); });
+}
+
+function focusSearch(){
+  if (state.currentPostId){
+    closeArticle();
+    setTimeout(function(){
+      var si = $('#searchInput');
+      if (si){
+        si.focus();
+        si.scrollIntoView({behavior:'smooth', block:'center'});
+        highlightSearchBox();
+      }
+    }, 200);
+  } else {
+    var si = $('#searchInput');
+    if (si){
+      si.focus();
+      si.scrollIntoView({behavior:'smooth', block:'center'});
+      highlightSearchBox();
+    }
+  }
+  if ($('#bmOverlay').classList.contains('on')) closeBookmarks();
+}
+
+function highlightSearchBox(){
+  var box = $('#searchBox');
+  if (!box) return;
+  box.classList.add('highlight');
+  setTimeout(function(){ box.classList.remove('highlight'); }, 1200);
+}
+
+function init(){
+  initTheme();
+  renderCategories();
+  renderPosts();
+  renderSeries();
+  renderTrending();
+  renderTags();
+  updateBookmarkCount();
+  initSearch();
+  initViewToggle();
+  initTopNav();
+  initNewsletter();
+  initCounters();
+
+  if (location.hash.indexOf('#post-') === 0){
+    var id = parseInt(location.hash.replace('#post-',''), 10);
+    var found = false;
+    for (var i = 0; i < POSTS.length; i++){ if (POSTS[i].id === id){ found = true; break; } }
+    if (found) openArticle(id);
+  }
+
+  $('#searchBtn').addEventListener('click', focusSearch);
+
+  document.addEventListener('keydown', function(e){
+    if (e.target.matches('input, textarea')) return;
+    if (e.key === '/'){
+      e.preventDefault();
+      focusSearch();
+    }
+  });
+
+  var si = $('#searchInput');
+  if (si){
+    si.addEventListener('keydown', function(e){
+      if (e.key === 'Escape'){
+        si.value = '';
+        state.searchQuery = '';
+        $('#clearBtn').classList.add('hidden');
+        renderPosts();
+        si.blur();
+      }
+    });
+  }
+
+  $('#toTop').addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+  $('#tocMobileBtn').addEventListener('click', openMobileToc);
+  $('#tocMobileClose').addEventListener('click', closeMobileToc);
+  $('#tocMobileOverlay').addEventListener('click', function(e){
+    if (e.target.id === 'tocMobileOverlay') closeMobileToc();
+  });
+
+  $('#bookmarkBtn').addEventListener('click', openBookmarks);
+  $('#bmClose').addEventListener('click', closeBookmarks);
+  $('#bmOverlay').addEventListener('click', function(e){
+    if (e.target.id === 'bmOverlay') closeBookmarks();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape'){
+      closeMobileToc();
+      closeBookmarks();
+    }
+  });
+}
+
+if (document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
+
+window.closeArticle = closeArticle;
+window.copyCode = copyCode;
+</script>
+
+</body>
+</html>
